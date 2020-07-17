@@ -24,17 +24,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-public abstract class TensorFlowAgent implements AlgorithmRL{
+public class TensorFlowAgent implements AlgorithmRL{
     
     public static String TARGET = "http://localhost:5002/agent/";
     public static String COLLECT_POLICY = "/next_train_action";
     public static String GREEDY_POLICY = "/next_best_action";
     public static String POLICY_FUNCTOR = "policy";
     public static String GREEDY_POLICY_FUNCTOR = "greedy";
-    
-    public static int N_ACTION_REAL = 10;
-    
-    protected abstract String getMethod();
+
     private String goal;
     
     private List<Observation> observations;
@@ -46,7 +43,6 @@ public abstract class TensorFlowAgent implements AlgorithmRL{
     private double preActionReward = 0;
     
     public TensorFlowAgent(String goal) {
-        super();
         this.goal = goal;
     }
 
@@ -92,7 +88,6 @@ public abstract class TensorFlowAgent implements AlgorithmRL{
     public void initialize(Agent agent, BeliefBaseRL bb) {
         
         EnvironmentRest<Integer, Double> environment = new EnvironmentRest<>();
-        environment.setAgent_type(getMethod());
         //actions specification
         actions = Action.discretizeAction(PlanLibraryRL.getAllActionsForGoal(agent, goal));
         

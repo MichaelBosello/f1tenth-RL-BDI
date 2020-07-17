@@ -11,19 +11,15 @@ import jason.asSyntax.Literal;
 import jason.asSyntax.Term;
 import jason.bb.DefaultBeliefBase;
 import rl.algorithm.AlgorithmRL;
-import rl.algorithm.Sarsa;
-import rl.algorithm.tf.Dqn;
-import rl.algorithm.tf.Reinforce;
+import rl.algorithm.tf.TensorFlowAgent;
 
 public class BeliefBaseRL extends DefaultBeliefBase {
 
     public static final String PARAMETER_FUNCTOR = "rl_parameter";
     public static final String OBSERVE_FUNCTOR = "rl_observe";
     public static final String ALGORITHM_FUNCTOR = "rl_algorithm";
-    
+
     public static final String DQN_ID = "dqn";
-    public static final String SARSA_ID = "sarsa";
-    public static final String REINFORCE_ID = "reinforce";
 
     Agent agentReference;
 
@@ -96,13 +92,7 @@ public class BeliefBaseRL extends DefaultBeliefBase {
                 String algorithm = belief.getTerm(1).toString();
                 if(!rl.containsKey(goal)) {
                     if(algorithm.equals(DQN_ID)) {
-                        rl.put(goal, new Dqn(goal));
-                    } else if(algorithm.equals(REINFORCE_ID)) {
-                        rl.put(goal, new Reinforce(goal));
-                    } else if(algorithm.equals(SARSA_ID)) {
-                        rl.put(goal, new Sarsa());
-                    } else {
-                        rl.put(goal, new Sarsa());
+                        rl.put(goal, new TensorFlowAgent(goal));
                     }
                 }
             }

@@ -7,8 +7,6 @@ import cartago.ObsProperty;
 import rest.RestClient;
 import rest.StateRest;
 
-import jason.asSyntax.Atom;
-
 public class CarEnv extends Artifact{
     
     RestClient<Double> car_env = new RestClient<>();
@@ -18,11 +16,6 @@ public class CarEnv extends Artifact{
         Map<String, String> parameters = new HashMap<>();
         StateRest<Double> state = car_env.initialize("CarEnv", parameters);
         defineObsProperty("lidar_data", state.getState().get(0));
-        defineObsProperty("cart_velocity", state.getState().get(1));
-        defineObsProperty("pole_position", state.getState().get(2));
-        defineObsProperty("pole_velocity", state.getState().get(3));
-        
-        defineObsProperty("rl_parameter", new Atom("policy"), new Atom("egreedy"));
     }
 
     @OPERATION
