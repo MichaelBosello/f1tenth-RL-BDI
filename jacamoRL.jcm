@@ -14,14 +14,14 @@
 
 mas jacamoRL {
 
-    agent rlagent : cartpole_agent.asl {
+    agent rlagent : car_driver.asl {
     	ag-bb-class: rl.beliefbase.BeliefBaseRL	
-    	focus: cartpole.cp
+    	focus: carenv.cp
     	verbose: 0
     }
     
-    workspace cartpole {
-        artifact cp: gym.Cartpole()
+    workspace carenv {
+        artifact cp: CarEnv()
     }
 
 }
