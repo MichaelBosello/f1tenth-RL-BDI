@@ -88,19 +88,19 @@ public class EnvironmentRest<ActionType, ObservationType> {
         this.init_state = init_state;
     }
 
-	public String getAgent_type() {
-		return agent_type;
-	}
+    public String getAgent_type() {
+        return agent_type;
+    }
 
-	public void setAgent_type(String agent_type) {
-		this.agent_type = agent_type;
-	}
+    public void setAgent_type(String agent_type) {
+        this.agent_type = agent_type;
+    }
 
-	public Map<String, String> getParameters() {
-		return parameters;
-	}
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
 
-	public void setParameters(Map<String, String> parameters) {
-		this.parameters = parameters;
-	}
+    public void setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
+    }
 }

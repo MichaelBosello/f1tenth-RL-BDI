@@ -31,8 +31,8 @@ public class StateRest<T> {
         this.terminal = terminal;
     }
 
-	@Override
-	public String toString() {
-		return "StateRest [state=" + state + ", reward=" + reward + ", terminal=" + terminal + "]";
-	}
+    @Override
+    public String toString() {
+        return "StateRest [state=" + state + ", reward=" + reward + ", terminal=" + terminal + "]";
+    }
 }
