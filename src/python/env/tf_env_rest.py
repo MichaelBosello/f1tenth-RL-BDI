@@ -14,33 +14,33 @@ log.setLevel(logging.ERROR)
 envs = {}
 
 class Env(Resource):
-  def post(self, id):
-    if not id in envs:
-      json_data = request.get_json(force=True)
-      print("##################################")
-      print(json_data)
-      env = CarEnv(json_data['parameters'])
-      envs[id] = env
+    def post(self, id):
+        if not id in envs:
+            json_data = request.get_json(force=True)
+            print("##################################")
+            print(json_data)
+            env = CarEnv(json_data['parameters'])
+            envs[id] = env
 
-    result = {'state': envs[id].state,
-              'reward' : envs[id].reward,
-              'terminal' : envs[id].is_terminal}
-    print("##################################")
-    print('starting state', result)
-    return jsonify(result)
+        result = {'state': envs[id].state,
+                  'reward' : envs[id].reward,
+                  'terminal' : envs[id].is_terminal}
+        print("##################################")
+        print('starting state', result)
+        return jsonify(result)
 
 class Action(Resource):
-  def post(self, id, action):
-    json_data = request.get_json(force=True)
-    #print("##################################")
-    #print(json_data)
-    reward, state, is_terminal = envs[id].step(int(action))
-    result = {'state': state,
-              'reward' : reward,
-              'terminal' : is_terminal}
-    #print("##################################")
-    #print(result)
-    return jsonify(result)
+    def post(self, id, action):
+        json_data = request.get_json(force=True)
+        #print("##################################")
+        #print(json_data)
+        reward, state, is_terminal = envs[id].step(int(action))
+        result = {'state': state,
+                  'reward' : reward,
+                  'terminal' : is_terminal}
+        #print("##################################")
+        #print(result)
+        return jsonify(result)
 
 api.add_resource(Env, '/env/<string:id>')
 api.add_resource(Action, '/env/<string:id>/<string:action>')
