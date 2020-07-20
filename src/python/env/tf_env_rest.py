@@ -2,8 +2,6 @@ from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
 import json
 
-from generic_tf_env import GenericTfEnv
-
 app = Flask(__name__)
 app.debug = False
 app.testing = False
@@ -21,12 +19,12 @@ class Env(Resource):
       json_data = request.get_json(force=True)
       print("##################################")
       print(json_data)
-      env = GenericTfEnv(json_data['name'], json_data['parameters'])
+      env = CarEnv(json_data['parameters'])
       envs[id] = env
 
-    result = {'state': envs[id].get_current_time_step().observation.tolist(),
-              'reward' : envs[id].get_current_time_step().reward.tolist(),
-              'terminal' : bool(envs[id].get_current_time_step().is_last())}
+    result = {'state': envs[id].state,
+              'reward' : envs[id].reward,
+              'terminal' : envs[id].is_terminal}
     print("##################################")
     print('starting state', result)
     return jsonify(result)
@@ -36,10 +34,10 @@ class Action(Resource):
     json_data = request.get_json(force=True)
     #print("##################################")
     #print(json_data)
-    next_step = envs[id].step(int(action))
-    result = {'state': next_step.observation.tolist(),
-              'reward' : next_step.reward.tolist(),
-              'terminal' : bool(next_step.is_last())}
+    reward, state, is_terminal = envs[id].step(int(action))
+    result = {'state': state,
+              'reward' : reward,
+              'terminal' : is_terminal}
     #print("##################################")
     #print(result)
     return jsonify(result)
