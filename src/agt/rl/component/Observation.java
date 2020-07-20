@@ -16,9 +16,10 @@ public class Observation implements Serializable{
     public static final String PARAM_SET_FUNCTOR = "set";
     public static final String PARAM_REAL_FUNCTOR = "real";
     public static final String PARAM_INT_FUNCTOR = "int";
+    public static final String PARAM_LIST_FUNCTOR = "list";
 
     public enum ParameterType {
-        SET, REAL, INT
+        SET, REAL, INT, LIST
     }
     
     private final String name;
@@ -51,6 +52,13 @@ public class Observation implements Serializable{
                     double min = ((NumberTerm)paramTypeLit.getTerm(0)).solve();
                     double max = ((NumberTerm)paramTypeLit.getTerm(1)).solve();
                     parameters.add(new ObservationParameter(min, max));
+                } catch (NoValueException e) {
+                    e.printStackTrace();
+                }
+            } else if(paramType.equals(PARAM_LIST_FUNCTOR)) {
+                try {
+                    int size = (int) ((NumberTerm)paramTypeLit.getTerm(0)).solve();
+                    parameters.add(new ObservationParameter(size));
                 } catch (NoValueException e) {
                     e.printStackTrace();
                 }

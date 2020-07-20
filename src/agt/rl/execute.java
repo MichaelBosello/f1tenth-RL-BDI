@@ -40,7 +40,7 @@ public class execute extends DefaultInternalAction {
         Set<Literal> observation = rlBB.getCurrentObservation(goal);
         double reward = rlBB.getCurrentReward(goal);
         boolean isTerminal = rlBB.isCurrentStateTerminal(goal);
-        Set<Action> action = PlanLibraryRL.getActionsForGoal(transitionSystem, unifier, goal);		
+        Set<Action> action = PlanLibraryRL.getActionsForGoal(transitionSystem, unifier, goal);
         
         Action rlResult = rlBB.getRLInstance(goal)
                 .nextAction(parameter, action, observation, reward, isTerminal);
