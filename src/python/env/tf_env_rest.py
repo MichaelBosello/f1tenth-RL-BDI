@@ -3,7 +3,7 @@ from flask_restful import Resource, Api
 import json
 
 app = Flask(__name__)
-app.debug = False
+app.debug = True
 app.testing = False
 api = Api(app)
 
@@ -24,11 +24,11 @@ class Env(Resource):
             print(json_data)
             env = CarEnv(json_data['parameters'])
             envs[id] = env
+            print("##################################")
 
         result = {'state': envs[id].state,
                   'reward' : envs[id].reward,
                   'terminal' : envs[id].is_terminal}
-        print("##################################")
         #print('starting state', result)
         return jsonify(result)
 

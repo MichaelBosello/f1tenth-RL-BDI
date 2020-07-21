@@ -6,7 +6,7 @@ import numpy as np
 from car_driver.rl_car_driver import DqnAgent
 
 app = Flask(__name__)
-app.debug = False
+app.debug = True
 app.testing = False
 api = Api(app)
 
