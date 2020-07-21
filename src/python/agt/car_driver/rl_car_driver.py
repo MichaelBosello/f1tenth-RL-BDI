@@ -11,12 +11,11 @@ import datetime
 import tensorflow as tf
 
 from car_driver.dqn import DeepQNetwork
-from car_driver.replay import ReplayMemory
+from car_driver.replay import ReplayMemory, Sample
 from car_driver.state import State
 
 class DqnAgent():
     def __init__(self, num_action, state_size, params={}):
-        self.is_simulator = params.get('simulator', 'false') == 'true'
         self.__parse_argument()
         self.__setup(num_action, state_size)
 
@@ -25,8 +24,6 @@ class DqnAgent():
     #################################
     def __parse_argument(self):
         parser = argparse.ArgumentParser()
-        # real car or simulator
-        parser.add_argument("--simulator", action='store_true', help="to set the use of the simulator")
         # agent parameters
         parser.add_argument("--learning-rate", type=float, default=0.00042, help="learning rate of the NN")
         parser.add_argument("--gamma", type=float, default=0.98, help="""gamma [0, 1] is the discount factor. It determines the importance of future rewards.
@@ -120,8 +117,8 @@ class DqnAgent():
             avg_rewards = np.mean(self.episode_train_reward_list)
 
             episode_avg_loss = 0
-            if episode_losses:
-                episode_avg_loss = np.mean(episode_losses)
+            if self.episode_losses:
+                episode_avg_loss = np.mean(self.episode_losses)
                 self.episode_losses = []
 
             log = ('Episode %d ended with score: %.2f (%s elapsed) (step: %d). Avg score: %.2f Avg loss: %.5f' %
@@ -167,7 +164,7 @@ class DqnAgent():
         if state is None or random.random() < epsilon:
             action = random.randrange(self.num_action)
         else:
-            action = dqn.inference(state.get_data())
+            action = self.dqn.inference(state.get_data())
         return action
 
     def epoch_step(self, state, reward, is_terminal):
@@ -187,6 +184,7 @@ class DqnAgent():
 
     def train(self, state, reward, is_terminal):
         self.steps += 1
+        self.repeat_step_count += 1
         self.episode_score += reward
         if self.steps % self.args.save_model_freq == 0:
             self.save_net = True
@@ -197,7 +195,7 @@ class DqnAgent():
             # Record experience in replay memory
             if self.old_state is not None:
                 current_state = self.old_state.state_by_adding_data(state)
-                self.replay_memory.add_sample(replay.Sample(self.old_state, self.action, reward, current_state, is_terminal))
+                self.replay_memory.add_sample(Sample(self.old_state, self.action, reward, current_state, is_terminal))
                 self.old_state = current_state
             else:
                 self.old_state = State().state_by_adding_data(state)
@@ -221,6 +219,7 @@ class DqnAgent():
                 self.save_net = False
             self.__log(True)
             self.episode_score = 0
+            return 0
 
         return self.action
 

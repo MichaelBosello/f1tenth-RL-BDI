@@ -1,6 +1,5 @@
 rl_algorithm(carenv, dqn).
 rl_parameter(policy, egreedy).
-rl_parameter(simulator, true).
 
 rl_observe(carenv, lidar_data(list(1080))).
 
