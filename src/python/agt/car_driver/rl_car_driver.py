@@ -10,8 +10,8 @@ import argparse
 import datetime
 import tensorflow as tf
 
-import car_driver.replay
-import car_driver.dqn
+from car_driver.dqn import DeepQNetwork
+from car_driver.replay import ReplayMemory
 from car_driver.state import State
 
 class DqnAgent():
@@ -75,8 +75,9 @@ class DqnAgent():
     # setup
     #################################
     def __setup(self, num_action, state_size):
+        State.setup(self.args)
         self.num_action = num_action
-        self.state_size = state_size
+        self.state_size = State.size_after_processing(state_size)
         base_output_dir = 'run-out-' + time.strftime("%Y-%m-%d-%H-%M-%S")
         os.makedirs(base_output_dir)
 
@@ -86,10 +87,8 @@ class DqnAgent():
         with self.summary_writer.as_default():
             tf.summary.text('params', str(self.args), step=0)
 
-        State.setup(self.args)
-
-        self.replay_memory = replay.ReplayMemory(base_output_dir, self.args)
-        self.dqn = dqn.DeepQNetwork(num_action, state_size,
+        self.replay_memory = ReplayMemory(base_output_dir, self.args)
+        self.dqn = DeepQNetwork(self.num_action, self.state_size,
                                 self.replay_memory, base_output_dir, tensorboard_dir, self.args)
 
         self.train_epsilon = self.args.epsilon

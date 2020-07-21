@@ -29,6 +29,10 @@ class State:
         State.image_height = args.image_height
         State.image_zoom = args.image_zoom
 
+    @staticmethod
+    def size_after_processing(state_size):
+        return int(state_size / State.reduce_by) - (State.cut_by * 2)
+
     def state_by_adding_data(self, data):
         data = self.process_data(data)
         
