@@ -88,6 +88,7 @@ public class TensorFlowAgent implements AlgorithmRL{
     public void initialize(Agent agent, BeliefBaseRL bb) {
         
         EnvironmentRest<Integer, Double> environment = new EnvironmentRest<>();
+        environment.setAgent_type("dqn");
         //actions specification
         actions = Action.discretizeAction(PlanLibraryRL.getAllActionsForGoal(agent, goal));
         
