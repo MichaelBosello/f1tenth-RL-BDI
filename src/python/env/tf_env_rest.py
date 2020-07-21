@@ -11,6 +11,8 @@ import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
+from carenv.car_env import CarEnv
+
 envs = {}
 
 class Env(Resource):

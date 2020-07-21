@@ -10,9 +10,9 @@ import argparse
 import datetime
 import tensorflow as tf
 
-import replay
-import dqn
-from state import State
+import car_driver.replay
+import car_driver.dqn
+from car_driver.state import State
 
 class DqnAgent():
     def __init__(self, num_action, state_size, params={}):

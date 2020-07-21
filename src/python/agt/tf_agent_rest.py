@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_restful import Resource, Api
 import json
 
-from rl_car_driver import DqnAgent
+from car_driver.rl_car_driver import DqnAgent
 
 app = Flask(__name__)
 app.debug = False

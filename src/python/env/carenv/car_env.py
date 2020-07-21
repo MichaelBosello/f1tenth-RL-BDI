@@ -5,9 +5,9 @@ import time
 
 import rospy
 
-from car.car_control import Drive
-from car.safety_control import SafetyControl
-from car.sensors import Sensors
+from carenv.car.car_control import Drive
+from carenv.car.safety_control import SafetyControl
+from carenv.car.sensors import Sensors
 
 MAX_STOP = 3
 

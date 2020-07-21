@@ -7,7 +7,10 @@ import argparse
 
 try:
     from geometry_msgs.msg import PoseStamped
-    from car.sensors import Sensors
+except ImportError:
+    pass
+try:
+    from carenv.car.sensors import Sensors
 except ImportError:
     from sensors import Sensors
 
