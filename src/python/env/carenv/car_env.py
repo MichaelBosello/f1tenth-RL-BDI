@@ -21,10 +21,12 @@ VELOCITY_NORMALIZATION = 0.55 # normalize the velocity between 0 and 1 (e.g. max
 REWARD_SCALING = 0.09 # scale the velocity rewards between [0, REWARD_SCALING]. I.e. at max velocity the reward is REWARD_SCALING
 
 class CarEnv:
-    
+    @staticmethod
+    def run_node():
+        rospy.init_node('rl_driver')
+
     def __init__(self, args={}):
         self.is_simulator = args.get('simulator', 'false') == 'true'
-        rospy.init_node('rl_driver')
         self.sensors = Sensors(is_simulator=self.is_simulator)
         self.control = Drive(self.sensors, is_simulator=self.is_simulator)
         self.safety_control = SafetyControl(self.control, self.sensors, is_simulator=self.is_simulator)

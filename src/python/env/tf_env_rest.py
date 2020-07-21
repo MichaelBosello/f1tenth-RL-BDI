@@ -13,6 +13,7 @@ log.setLevel(logging.ERROR)
 
 from carenv.car_env import CarEnv
 
+CarEnv.run_node()
 envs = {}
 
 class Env(Resource):
@@ -28,7 +29,7 @@ class Env(Resource):
                   'reward' : envs[id].reward,
                   'terminal' : envs[id].is_terminal}
         print("##################################")
-        print('starting state', result)
+        #print('starting state', result)
         return jsonify(result)
 
 class Action(Resource):
