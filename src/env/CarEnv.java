@@ -8,12 +8,15 @@ import rest.RestClient;
 import rest.StateRest;
 
 public class CarEnv extends Artifact{
+
+    private static final boolean IS_SIMULATOR = true;
     
     RestClient<Double> car_env = new RestClient<>();
 
     @OPERATION
     public void init() {
         Map<String, String> parameters = new HashMap<>();
+        parameters.put("simulator", Boolean.toString(IS_SIMULATOR));
         StateRest<Double> state = car_env.initialize("CarEnv", parameters);
         defineObsProperty("lidar_data", state.getState());
         defineObsProperty("reward", state.getReward());
