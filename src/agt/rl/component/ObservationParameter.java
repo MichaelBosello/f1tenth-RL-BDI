@@ -12,7 +12,6 @@ public class ObservationParameter implements Serializable{
     
     private ParameterType type;
     private double min, max;
-    private int size;
     private List<String> set;
     private String value;
     
@@ -31,16 +30,10 @@ public class ObservationParameter implements Serializable{
         this.set = set;
     }
 
-    public ObservationParameter(int size){
-        type = ParameterType.LIST;
-        this.size = size;
-    }
-    
     public ObservationParameter(ObservationParameter copy) {
         type = copy.type;
         this.min = copy.min;
         this.max = copy.max;
-        this.size = copy.size;
         if(copy.set != null) {
             this.set = new ArrayList<>(copy.set);
         }
@@ -48,7 +41,6 @@ public class ObservationParameter implements Serializable{
     
     public double getMin() { return min; }
     public double getMax() { return max; }
-    public int getSize() { return size; }
     public List<String> getSet() { return set; }
     public ParameterType getType() { return type; }
 
@@ -68,7 +60,6 @@ public class ObservationParameter implements Serializable{
         result = prime * result + (int) (temp ^ (temp >>> 32));
         temp = Double.doubleToLongBits(min);
         result = prime * result + (int) (temp ^ (temp >>> 32));
-        result = prime * result + size;
         result = prime * result + ((set == null) ? 0 : set.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
         result = prime * result + ((value == null) ? 0 : value.hashCode());
@@ -88,8 +79,6 @@ public class ObservationParameter implements Serializable{
             return false;
         if (Double.doubleToLongBits(min) != Double.doubleToLongBits(other.min))
             return false;
-        if (size != other.size)
-            return false;
         if (set == null) {
             if (other.set != null)
                 return false;
@@ -107,6 +96,6 @@ public class ObservationParameter implements Serializable{
     @Override
     public String toString() {
         return "ActionParameter [type=" + type + ", min=" + min + ", max=" + max + ", set=" + set
-                + ", size=" + size + ", value=" + value + "]";
+                + ", value=" + value + "]";
     }
 }

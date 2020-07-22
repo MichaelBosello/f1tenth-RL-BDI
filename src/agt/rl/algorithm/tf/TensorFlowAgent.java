@@ -131,11 +131,6 @@ public class TensorFlowAgent implements AlgorithmRL{
                 } else if(param.getType() == Observation.ParameterType.SET) {
                     o_min.add(0.0);
                     o_max.add((double) param.getSet().size() - 1);
-                } else if(param.getType() == Observation.ParameterType.LIST) {
-                    for(int i = 0; i < param.getSize(); i++) {
-                        o_min.add(Double.MIN_VALUE);
-                        o_max.add(Double.MAX_VALUE);
-                    }
                 }
             }
         }
@@ -188,9 +183,6 @@ public class TensorFlowAgent implements AlgorithmRL{
                     stateTF.add(Double.parseDouble(param.getValue()));
                 } else if(param.getType() == Observation.ParameterType.SET) {
                     stateTF.add((double) param.getSet().indexOf(param.getValue()));
-                } else if(param.getType() == Observation.ParameterType.LIST) {
-                    //TODO
-                    System.out.println(param.getValue());
                 }
             }
         }

@@ -58,7 +58,9 @@ public class Observation implements Serializable{
             } else if(paramType.equals(PARAM_LIST_FUNCTOR)) {
                 try {
                     int size = (int) ((NumberTerm)paramTypeLit.getTerm(0)).solve();
-                    parameters.add(new ObservationParameter(size));
+                    for(int i = 0; i < size; i++) {
+                        parameters.add(new ObservationParameter(Double.MIN_VALUE, Double.MAX_VALUE));
+                    }
                 } catch (NoValueException e) {
                     e.printStackTrace();
                 }
