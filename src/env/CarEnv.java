@@ -18,7 +18,7 @@ public class CarEnv extends Artifact{
         Map<String, String> parameters = new HashMap<>();
         parameters.put("simulator", Boolean.toString(IS_SIMULATOR));
         StateRest<Double> state = car_env.initialize("CarEnv", parameters);
-        defineObsProperty("lidar_data", state.getState());
+        defineObsProperty("lidar_data", state.getState().toArray(new Double[0]));
         defineObsProperty("reward", state.getReward());
     }
 
@@ -52,7 +52,7 @@ public class CarEnv extends Artifact{
     
     private void updatePercepts(StateRest<Double> state) {
         ObsProperty lidar_data = getObsProperty("lidar_data");
-        lidar_data.updateValue(0, state.getState());
+        lidar_data.updateValues(state.getState().toArray(new Double[0]));
         ObsProperty reward = getObsProperty("reward");
         reward.updateValue(0, state.getReward());
 
