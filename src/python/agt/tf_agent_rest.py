@@ -41,7 +41,7 @@ class Action(Resource):
         if action_type == "next_best_action":
             action = agents[id].inference(np.array(json_data['state'], dtype=json_data['state_type']),
                                           json_data['reward'], json_data['is_terminal'])
-        result = {'action': [action]}
+        result = {'action': [int(action)]}
         #print("##################################")
         #print(result)
         return jsonify(result)

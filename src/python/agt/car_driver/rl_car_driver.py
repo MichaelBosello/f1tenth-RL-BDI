@@ -164,7 +164,7 @@ class DqnAgent():
         if state is None or random.random() < epsilon:
             action = random.randrange(self.num_action)
         else:
-            action = self.dqn.inference(state.get_data())
+            action = self.dqn.inference(state.get_data())[0]
         return action
 
     def epoch_step(self, state, reward, is_terminal):
