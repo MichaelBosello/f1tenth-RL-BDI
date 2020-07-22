@@ -11,7 +11,7 @@ app.testing = False
 api = Api(app)
 
 import logging
-log = logging.getLogger('logger')
+log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 agents = {}
