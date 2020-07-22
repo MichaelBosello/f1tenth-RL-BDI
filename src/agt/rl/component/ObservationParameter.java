@@ -13,7 +13,7 @@ public class ObservationParameter implements Serializable{
     private ParameterType type;
     private double min, max;
     private List<String> set;
-    private String value;
+    private double value;
     
     public ObservationParameter(int min, int max){
         type = ParameterType.INT;
@@ -44,9 +44,9 @@ public class ObservationParameter implements Serializable{
     public List<String> getSet() { return set; }
     public ParameterType getType() { return type; }
 
-    public String getValue() { return value; }
+    public double getValue() { return value; }
     
-    public void setValue(String value) {
+    public void setValue(double value) {
         this.value = value;
     }
 
@@ -62,7 +62,8 @@ public class ObservationParameter implements Serializable{
         result = prime * result + (int) (temp ^ (temp >>> 32));
         result = prime * result + ((set == null) ? 0 : set.hashCode());
         result = prime * result + ((type == null) ? 0 : type.hashCode());
-        result = prime * result + ((value == null) ? 0 : value.hashCode());
+        temp = Double.doubleToLongBits(value);
+        result = prime * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
 
@@ -86,10 +87,7 @@ public class ObservationParameter implements Serializable{
             return false;
         if (type != other.type)
             return false;
-        if (value == null) {
-            if (other.value != null)
-                return false;
-        } else if (!value.equals(other.value))
+        if (Double.doubleToLongBits(value) != Double.doubleToLongBits(other.value))
             return false;
         return true;
     }

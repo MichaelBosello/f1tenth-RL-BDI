@@ -93,14 +93,23 @@ public class Observation implements Serializable{
         Literal observation = (Literal) observationTerm;
         int index = 0;
         for(Term param : observation.getTerms()) {
-            parameters.get(index).setValue(param.toString());
+            ObservationParameter parameter = parameters.get(index);
+            if(parameter.getType() == ParameterType.SET) {
+                parameter.setValue(parameter.getSet().indexOf(param.toString()));
+            } else {
+                try {
+                    parameter.setValue(((NumberTerm) param).solve());
+                } catch (NoValueException e) {
+                    e.printStackTrace();
+                }
+            }
             index++;
         }
     }
     
     public void clearValues() {
         for(ObservationParameter param : parameters) {
-            param.setValue("");
+            param.setValue(0);
         }
     }
 
