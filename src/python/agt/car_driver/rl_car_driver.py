@@ -39,7 +39,7 @@ class DqnAgent():
         parser.add_argument("--model", help="tensorflow model directory to initialize from (e.g. run/model)")
         parser.add_argument("--history-length", type=int, default=2, help="(>=1) length of history used in the dqn. An action is performed [history-length] time")
         parser.add_argument("--repeat-action", type=int, default=2, help="(>=0) actions are repeated [repeat-action] times. Unlike history-length, it doesn't increase the network size")
-        parser.add_argument("--gpu-time", type=int, default=0.003, help="""waiting time (seconds) between actions when agent is not training (observation steps/evaluation).
+        parser.add_argument("--gpu-time", type=int, default=0.002, help="""waiting time (seconds) between actions when agent is not training (observation steps/evaluation).
                                         It should be the amount of time used by your CPU/GPU to perform a training sweep. It is needed to have the same states and rewards as
                                         training takes time and the environment evolves indipendently""")
         parser.add_argument("--slowdown-cycle", type=bool, default=False, help="add a sleep equal to [gpu-time] in the training cycle")
@@ -105,7 +105,8 @@ class DqnAgent():
         self.action = None
         self.is_epoch_training = True
         self.start_time_cycle = None
-        self.time_list = []
+        self.time_list_train = []
+        self.time_list_eval = []
 
     #################################
     # logging
@@ -176,31 +177,37 @@ class DqnAgent():
             if not is_terminal:
                 if self.start_time_cycle is not None:
                     cycle_time = (datetime.datetime.now() - self.start_time_cycle).total_seconds()
-                    self.time_list.insert(0, cycle_time)
-                    if len(self.time_list) > 100:
-                        self.time_list = self.time_list[:-1]
-                    print("Cycle time: %fs, Avg time:%fs" % (cycle_time, np.mean(self.time_list)))
+                    if self.is_epoch_training:
+                        self.time_list_train.insert(0, cycle_time)
+                        if len(self.time_list_train) > 100:
+                            self.time_list_train = self.time_list_train[:-1]
+                        print("Cycle time (train): %fs, Avg time:%fs" % (cycle_time, np.mean(self.time_list_train)))
+                    else:
+                        self.time_list_eval.insert(0, cycle_time)
+                        if len(self.time_list_eval) > 100:
+                            self.time_list_eval = self.time_list_eval[:-1]
+                        print("Cycle time (eval): %fs, Avg time:%fs" % (cycle_time, np.mean(self.time_list_eval)))
                 self.start_time_cycle = datetime.datetime.now()
             else:
                 self.start_time_cycle = None
-
-        if self.is_epoch_training:
-            if self.steps - self.step_start >= self.args.train_epoch_steps:
-                self.is_epoch_training = False
-                self.step_start = self.steps
-        else:
-            if self.steps - self.step_start >= self.args.eval_epoch_steps:
-                self.is_epoch_training = True
-                self.step_start = self.steps
 
         self.steps += 1
         self.episode_score += reward
         if self.steps % self.args.save_model_freq == 0:
             self.save_net = True
         if self.is_epoch_training:
-            return self.train(state, reward, is_terminal)
+            action = self.train(state, reward, is_terminal)
         else:
-            return self.inference(state, reward, is_terminal)
+            action = self.inference(state, reward, is_terminal)
+
+        if self.steps - self.step_start >= self.args.train_epoch_steps and is_terminal:
+            self.is_epoch_training = False
+            self.step_start = self.steps
+        if self.steps - self.step_start >= self.args.eval_epoch_steps and is_terminal:
+            self.is_epoch_training = True
+            self.step_start = self.steps
+
+        return action
 
     def train(self, state, reward, is_terminal):
         self.repeat_step_count += 1
@@ -248,6 +255,7 @@ class DqnAgent():
         else:
             self.old_state = State().state_by_adding_data(state)
         action = self.__choose_action(self.old_state, False)
+        time.sleep(self.args.gpu_time)
 
         if is_terminal:
             self.old_state = None
