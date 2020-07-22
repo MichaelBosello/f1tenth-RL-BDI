@@ -200,12 +200,14 @@ class DqnAgent():
         else:
             action = self.inference(state, reward, is_terminal)
 
-        if self.steps - self.step_start >= self.args.train_epoch_steps and is_terminal:
-            self.is_epoch_training = False
-            self.step_start = self.steps
-        if self.steps - self.step_start >= self.args.eval_epoch_steps and is_terminal:
-            self.is_epoch_training = True
-            self.step_start = self.steps
+        if self.is_epoch_training and self.args.eval_epoch_steps > 0:
+            if self.steps - self.step_start >= self.args.train_epoch_steps:
+                self.is_epoch_training = False
+                self.step_start = self.steps
+        if not self.is_epoch_training and self.args.train_epoch_steps > 0:
+            if self.steps - self.step_start >= self.args.eval_epoch_steps:
+                self.is_epoch_training = True
+                self.step_start = self.steps
 
         return action
 
