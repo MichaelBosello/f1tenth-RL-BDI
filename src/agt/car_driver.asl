@@ -3,7 +3,7 @@ rl_parameter(policy, egreedy).
 
 rl_observe(carenv, lidar_data(list(1080))).
 
-rl_reward(carenv, reward) :- reward.
+rl_reward(carenv, R) :- reward(R).
 
 rl_terminal(carenv) :- crash.
 
