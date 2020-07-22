@@ -39,10 +39,11 @@ class DqnAgent():
         parser.add_argument("--model", help="tensorflow model directory to initialize from (e.g. run/model)")
         parser.add_argument("--history-length", type=int, default=2, help="(>=1) length of history used in the dqn. An action is performed [history-length] time")
         parser.add_argument("--repeat-action", type=int, default=2, help="(>=0) actions are repeated [repeat-action] times. Unlike history-length, it doesn't increase the network size")
-        parser.add_argument("--gpu-time", type=int, default=0.014, help="""waiting time (seconds) between actions when agent is not training (observation steps/evaluation).
+        parser.add_argument("--gpu-time", type=int, default=0.003, help="""waiting time (seconds) between actions when agent is not training (observation steps/evaluation).
                                         It should be the amount of time used by your CPU/GPU to perform a training sweep. It is needed to have the same states and rewards as
                                         training takes time and the environment evolves indipendently""")
-        parser.add_argument("--slowdown-cycle", type=bool, default=True, help="add a sleep equal to [gpu-time] in the training cycle")
+        parser.add_argument("--slowdown-cycle", type=bool, default=False, help="add a sleep equal to [gpu-time] in the training cycle")
+        parser.add_argument("--show-cycle-time", type=bool, default=False, help="it prints the seconds used in one step, useful to update the above param")
         # lidar pre-processing
         parser.add_argument("--reduce-lidar-data", type=int, default=30, help="lidar data are grouped by taking the min of [reduce-lidar-data] elements")
         parser.add_argument("--cut-lidar-data", type=int, default=8, help="N element at begin and end of lidar data are cutted. Executed after the grouping")
@@ -96,12 +97,15 @@ class DqnAgent():
         self.episode_eval_reward_list = []
         self.episode_losses = []
         self.steps = 0
+        self.step_start = 0
         self.repeat_step_count = 0
         self.episode_score = 0
         self.save_net = False
         self.old_state = None
         self.action = None
         self.is_epoch_training = True
+        self.start_time_cycle = None
+        self.time_list = []
 
     #################################
     # logging
@@ -168,6 +172,18 @@ class DqnAgent():
         return action
 
     def epoch_step(self, state, reward, is_terminal):
+        if self.args.show_cycle_time:
+            if not is_terminal:
+                if self.start_time_cycle is not None:
+                    cycle_time = (datetime.datetime.now() - self.start_time_cycle).total_seconds()
+                    self.time_list.insert(0, cycle_time)
+                    if len(self.time_list) > 100:
+                        self.time_list = self.time_list[:-1]
+                    print("Cycle time: %fs, Avg time:%fs" % (cycle_time, np.mean(self.time_list)))
+                self.start_time_cycle = datetime.datetime.now()
+            else:
+                self.start_time_cycle = None
+
         if self.is_epoch_training:
             if self.steps - self.step_start >= self.args.train_epoch_steps:
                 self.is_epoch_training = False
@@ -177,17 +193,17 @@ class DqnAgent():
                 self.is_epoch_training = True
                 self.step_start = self.steps
 
+        self.steps += 1
+        self.episode_score += reward
+        if self.steps % self.args.save_model_freq == 0:
+            self.save_net = True
         if self.is_epoch_training:
             return self.train(state, reward, is_terminal)
         else:
             return self.inference(state, reward, is_terminal)
 
     def train(self, state, reward, is_terminal):
-        self.steps += 1
         self.repeat_step_count += 1
-        self.episode_score += reward
-        if self.steps % self.args.save_model_freq == 0:
-            self.save_net = True
 
         if (self.repeat_step_count >= self.args.history_length * (self.args.repeat_action + 1)
                 or self.action is None):
