@@ -27,7 +27,7 @@ class Env(Resource):
             json_data['init_state'], json_data['agent_type'], json_data['parameters']))
             print("##################################")
             if json_data['agent_type'] == "dqn":
-                agent = DqnAgent(json_data['a_max'][0], json_data['o_shape'][0], json_data['parameters'])
+                agent = DqnAgent(json_data['a_max'][0] + 1, json_data['o_shape'][0], json_data['parameters'])
             agents[id] = agent
 
 class Action(Resource):
