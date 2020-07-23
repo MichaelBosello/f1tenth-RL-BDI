@@ -39,10 +39,10 @@ class DqnAgent():
         parser.add_argument("--model", help="tensorflow model directory to initialize from (e.g. run/model)")
         parser.add_argument("--history-length", type=int, default=2, help="(>=1) length of history used in the dqn. An action is performed [history-length] time")
         parser.add_argument("--repeat-action", type=int, default=2, help="(>=0) actions are repeated [repeat-action] times. Unlike history-length, it doesn't increase the network size")
-        parser.add_argument("--gpu-time", type=int, default=0.002, help="""waiting time (seconds) between actions when agent is not training (observation steps/evaluation).
+        parser.add_argument("--gpu-time", type=int, default=0.003, help="""waiting time (seconds) between actions when agent is not training (observation steps/evaluation).
                                         It should be the amount of time used by your CPU/GPU to perform a training sweep. It is needed to have the same states and rewards as
                                         training takes time and the environment evolves indipendently""")
-        parser.add_argument("--slowdown-cycle", type=bool, default=False, help="add a sleep equal to [gpu-time] in the training cycle")
+        parser.add_argument("--slowdown-cycle", type=bool, default=True, help="add a sleep equal to [gpu-time] in the training cycle")
         parser.add_argument("--show-cycle-time", type=bool, default=False, help="it prints the seconds used in one step, useful to update the above param")
         # lidar pre-processing
         parser.add_argument("--reduce-lidar-data", type=int, default=30, help="lidar data are grouped by taking the min of [reduce-lidar-data] elements")
@@ -220,7 +220,9 @@ class DqnAgent():
             # Record experience in replay memory
             if self.old_state is not None:
                 current_state = self.old_state.state_by_adding_data(state)
-                self.replay_memory.add_sample(Sample(self.old_state, self.action, reward, current_state, is_terminal))
+                if self.action is not None:
+                    self.replay_memory.add_sample(Sample(
+                        self.old_state, self.action, reward, current_state, is_terminal))
                 self.old_state = current_state
             else:
                 self.old_state = State().state_by_adding_data(state)
