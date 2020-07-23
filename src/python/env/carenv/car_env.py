@@ -38,6 +38,7 @@ class CarEnv:
         self.game_number = 0
         self.step_number = 0
         self.is_terminal = False
+        self.stuck_count = 0
 
         self.reset_game()
 
@@ -64,12 +65,20 @@ class CarEnv:
                 self.control.forward()
                 time.sleep(0.4)
 
+            if self.is_simulator:
+                self.stuck_count = self.stuck_count + 1
+                if self.stuck_count > 2:
+                    print("Car stuck, resetting simulator position...")
+                    self.control.reset_simulator()
+                    self.stuck_count = 0
+
             self.state = self._get_car_state()
             self.reward = -1
             self.is_terminal = True
             self.game_score += self.reward
             return self.reward, self.state, self.is_terminal
 
+        self.stuck_count = 0
         reward = 0
         if action == 0:
             self.control.forward()
@@ -109,6 +118,7 @@ class CarEnv:
         self.reward = reward
         self.is_terminal = False
         self.game_score += self.reward
+
         return self.reward, self.state, self.is_terminal
 
     def reset_game(self):
