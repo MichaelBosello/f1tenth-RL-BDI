@@ -39,7 +39,7 @@ class DqnAgent():
         parser.add_argument("--model", help="tensorflow model directory to initialize from (e.g. run/model)")
         parser.add_argument("--history-length", type=int, default=2, help="(>=1) length of history used in the dqn. An action is performed [history-length] time")
         parser.add_argument("--repeat-action", type=int, default=2, help="(>=0) actions are repeated [repeat-action] times. Unlike history-length, it doesn't increase the network size")
-        parser.add_argument("--gpu-time", type=int, default=0.003, help="""waiting time (seconds) between actions when agent is not training (observation steps/evaluation).
+        parser.add_argument("--gpu-time", type=int, default=0.0035, help="""waiting time (seconds) between actions when agent is not training (observation steps/evaluation).
                                         It should be the amount of time used by your CPU/GPU to perform a training sweep. It is needed to have the same states and rewards as
                                         training takes time and the environment evolves indipendently""")
         parser.add_argument("--slowdown-cycle", type=bool, default=True, help="add a sleep equal to [gpu-time] in the training cycle")
@@ -192,15 +192,19 @@ class DqnAgent():
                 self.start_time_cycle = None
 
         self.steps += 1
+        self.repeat_step_count += 1
         self.episode_score += reward
         if self.steps % self.args.save_model_freq == 0:
             self.save_net = True
+
         if self.is_epoch_training:
             action = self.train(state, reward, is_terminal)
         else:
             action = self.inference(state, reward, is_terminal)
 
         if is_terminal:
+            self.repeat_step_count = 0
+            self.episode_score = 0
             if self.is_epoch_training and self.args.eval_epoch_steps > 0:
                 if self.steps - self.step_start >= self.args.train_epoch_steps:
                     self.is_epoch_training = False
@@ -213,8 +217,6 @@ class DqnAgent():
         return action
 
     def train(self, state, reward, is_terminal):
-        self.repeat_step_count += 1
-
         if (self.repeat_step_count >= self.args.history_length * (self.args.repeat_action + 1)
                 or self.action is None):
             self.repeat_step_count = 0
@@ -246,25 +248,26 @@ class DqnAgent():
                 self.dqn.save_network()
                 self.save_net = False
             self.__log(True)
-            self.episode_score = 0
             return 0
 
         return self.action
 
 
     def inference(self, state, reward, is_terminal):
-        self.episode_score += reward
-
-        if self.old_state is not None:
-            self.old_state = self.old_state.state_by_adding_data(state)
-        else:
-            self.old_state = State().state_by_adding_data(state)
-        action = self.__choose_action(self.old_state, False)
+        if (self.repeat_step_count >= self.args.history_length * (self.args.repeat_action + 1)
+                or self.action is None):
+            self.repeat_step_count = 0
+            if self.old_state is not None:
+                self.old_state = self.old_state.state_by_adding_data(state)
+            else:
+                self.old_state = State().state_by_adding_data(state)
+            self.action = self.__choose_action(self.old_state, False)
         time.sleep(self.args.gpu_time)
 
         if is_terminal:
             self.old_state = None
+            self.action = None
             self.__log(False)
-            self.episode_score = 0
+            return 0
 
-        return action
+        return self.action
