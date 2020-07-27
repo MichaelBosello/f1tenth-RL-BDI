@@ -39,7 +39,7 @@ class DqnAgent():
         parser.add_argument("--model", help="tensorflow model directory to initialize from (e.g. run/model)")
         parser.add_argument("--history-length", type=int, default=2, help="(>=1) length of history used in the dqn. An action is performed [history-length] time")
         parser.add_argument("--repeat-action", type=int, default=2, help="(>=0) actions are repeated [repeat-action] times. Unlike history-length, it doesn't increase the network size")
-        parser.add_argument("--gpu-time", type=int, default=0.0035, help="""waiting time (seconds) between actions when agent is not training (observation steps/evaluation).
+        parser.add_argument("--gpu-time", type=int, default=0.004, help="""waiting time (seconds) between actions when agent is not training (observation steps/evaluation).
                                         It should be the amount of time used by your CPU/GPU to perform a training sweep. It is needed to have the same states and rewards as
                                         training takes time and the environment evolves indipendently""")
         parser.add_argument("--slowdown-cycle", type=bool, default=True, help="add a sleep equal to [gpu-time] in the training cycle")
@@ -218,7 +218,7 @@ class DqnAgent():
 
     def train(self, state, reward, is_terminal):
         if (self.repeat_step_count >= self.args.history_length * (self.args.repeat_action + 1)
-                or self.action is None):
+                or self.action is None or is_terminal):
             self.repeat_step_count = 0
             # Record experience in replay memory
             if self.old_state is not None:
