@@ -1,3 +1,4 @@
+from threading import Thread
 import numpy as np
 import os
 import random
@@ -39,6 +40,17 @@ class CarEnv:
         self.step_number = 0
         self.is_terminal = False
         self.stuck_count = 0
+
+        def reset_handler():
+            while True:
+                user_input = input()
+                if user_input == 'r':
+                    print("Resetting simulator position...")
+                    self.control.reset_simulator()
+
+        process = Thread(target=reset_handler)
+        process.daemon = True
+        process.start()
 
         self.reset_game()
 
