@@ -103,7 +103,7 @@ class DqnAgent():
         self.save_net = False
         self.old_state = None
         self.action = None
-        self.is_epoch_training = True
+        self.is_epoch_training = self.args.train_epoch_steps > 0
         self.start_time_cycle = None
         self.time_list_train = []
         self.time_list_eval = []
