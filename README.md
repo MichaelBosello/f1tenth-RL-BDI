@@ -1,23 +1,8 @@
-# BDI-RL Framework Proof of Concept
-This project is a PoC of the framework presented in 
+# F1TENTH-RL-BDI
 
-***From Programming Agents to Educating Agents – A Jason-based Framework for Integrating Learning in the Development of Cognitive Agents***
+[TODO]
 
-Paper avaliable at: http://cgi.csc.liv.ac.uk/~lad/emas2019/accepted/EMAS2019_paper_33.pdf
-
-Slides of the presentation at EMAS: https://www.slideshare.net/MichaelBosello/emas-2019-from-programming-agents-to-educating-agents
-
-This is an integration of BDI agents and Reinforcement Learning.
-It is based on [Jason](http://jason.sourceforge.net/wp/) (Actually, it is a [JaCaMo](http://jacamo.sourceforge.net/) project).
-
-The basic idea is that a developer could write some plans and let the agent itself learn other plans and use them in a seamless way. This is not only for a specific ad hoc problem but as a general feature of the agent platform.
-
-In short, the aim of the framework is to enable the developer to define the learning components with high-level abstractions as the BDI ones are. Then, these informations injeced by the developer are used by the agent to learn itself how to fulfill some tasks. 
-
-The work of the developer moves from write plans to define a learning phase.
-
-
-# Quick start
+## Quick start
 Build the project
 
 	./gradlew build
@@ -25,6 +10,13 @@ Build the project
 Stop previous istances
 
 	./gradlew --stop
+
+Launch the f1tenth simulator:
++ Go to the working directory of the simulator (*/simulator*)
+
+`$ source devel/setup.bash`
+
+`$ roslaunch f1tenth_simulator simulator.launch`
 
 Run the python agent server
 
@@ -39,10 +31,60 @@ Run the agent system:
 
 	./gradlew run
 
-## dependencies
-Install Java
 
-	sudo apt-get install openjdk-8-jdk
+## Installation
+
+### Car simulator & RL algorithm
+
+1) Install [ROS Melodic (desktop-full)](http://wiki.ros.org/melodic/Installation/Ubuntu)
+
+2) Install the dependencies
+
+    `$ sudo apt-get install python3-pip python3-yaml`
+
+    `$ pip3 install rospkg catkin_pkg`
+
+    `$ sudo apt-get install ros-melodic-ackermann-msgs`
+
+3) __Optional__ dependencies
+
+    You need to install these packets *only if* you want to use the relative function
+
+    To visualize the images built from lidar data (lidar-to-image = True, show-image = True) you need opencv:
+
+    `$ pip3 install opencv-python`
+
+    To use compression of replay buffer (--compress-replay):
+
+    `$ pip3 install blosc`
+
+4) Setup the car simulator:
+
+    `sudo apt-get install ros-melodic-map-server ros-melodic-joy`
+
+    `$ mkdir -p simulator/src`
+
+    `$ cd simulator/src`
+
+    `$ git clone https://github.com/f1tenth/f1tenth_simulator.git`
+
+    `$ cd ../`
+
+    `$ catkin_make`
+
+5) Install tensorflow 2.1.x
+
+    `$ pip3 install tensorflow`
+
+
+### Jason-RL framework
+1) Install Java (>= 11)
+
+	sudo add-apt-repository ppa:linuxuprising/java
+	sudo apt update
+	sudo apt-get install default-jre
+
+2) install the python dependencies
 
 	pip3 install flask flask-jsonpify flask-restful
 
