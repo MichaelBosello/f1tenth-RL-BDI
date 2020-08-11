@@ -1,6 +1,6 @@
 # F1TENTH-RL-BDI
 
-Implementation of a BDI driver agent that uses BDI plans for high-level path planning and Reinforcement Learing for low level control.
+Implementation of a BDI driver agent that uses BDI plans for high-level path planning and Reinforcement Learning for low level control.
 
 This work is based on the [Jason-RL](https://github.com/MichaelBosello/jacamo-rl) framework and the [f1tenth-rl](https://github.com/MichaelBosello/f1tenth-RL) project. You can find additional useful documentation in those repo.
 
