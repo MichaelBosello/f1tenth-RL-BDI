@@ -103,9 +103,9 @@ class Drive():
             time.sleep(0.1)
 
 
-    def reset_simulator(self):
+    def reset_simulator(self, position=PoseStamped()):
         if self.is_simulator:
-            self.reset_publisher.publish(PoseStamped())
+            self.reset_publisher.publish(position)
 
 
 if __name__ == '__main__':
