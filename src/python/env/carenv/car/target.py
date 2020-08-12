@@ -66,8 +66,6 @@ class Target():
             self.marker[self.target].header.stamp = rospy.get_rostime()
             self.marker_publisher.publish(self.marker[self.target])
 
-
-
     def current_target(self):
         return self.target
 
