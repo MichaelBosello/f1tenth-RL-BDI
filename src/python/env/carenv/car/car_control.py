@@ -115,7 +115,8 @@ if __name__ == '__main__':
 
     run_seconds = 0.3
     rospy.init_node('drive_test')
-    drive = Drive(args.simulator)
+    sensors = Sensors(args.simulator)
+    drive = Drive(sensors, args.simulator)
     while True:
         print("Write command")
         cmd = input()
