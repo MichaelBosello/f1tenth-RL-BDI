@@ -3,16 +3,33 @@ from nav_msgs.msg import Odometry
 
 import argparse
 
+try:
+    from geometry_msgs.msg import PoseStamped
+except ImportError:
+    pass
+
+try:
+    from carenv.car.sensors import Sensors
+except ImportError:
+    from sensors import Sensors
+
+try:
+    from carenv.car.car_control import Drive
+except ImportError:
+    from car_control import Drive
+
 
 class Position():
-    def __init__(self, is_simulator=False):
+    def __init__(self, control, is_simulator=False):
         self.is_simulator = is_simulator
+        self.control = control
         self.odometry = None
         if not is_simulator:
             odom_topic = "/vesc/odom"
         else:
             odom_topic = "/odom"
         self.odom_subscriber = rospy.Subscriber(odom_topic, Odometry, self.odometry_callback)
+        self.last_position = None
 
     def odometry_callback(self, odometry):
         self.odometry = odometry
@@ -23,16 +40,39 @@ class Position():
     def car_position(self):
         c = self.car_position_coordinates()
         if c.x > 8.25 and c.x < 9 and c.y > -0.7 and c.y < 0.7:
+            self.last_position = "A"
             return "A"
         if c.x > 9.55 and c.x < 10.8 and c.y > 1.38 and c.y < 2.13:
+            self.last_position = "B"
             return "B"
         if c.x > 11.38 and c.x < 12.13 and c.y > -0.7 and c.y < 0.7:
+            self.last_position = "C"
             return "C"
         if c.x > 6.68 and c.x < 8 and c.y > 9.45 and c.y < 11:
             return "END1"
         if c.x > 17.2 and c.x < 18.5 and c.y > 13.6 and c.y < 14.9:
             return "END2"
-        return None
+        return ""
+
+    def reset_to_last_pos(self):
+        pose = PoseStamped()
+        if self.last_position == "A":
+            pose.pose.position.x = 8.625
+            pose.pose.position.y = 0
+            pose.pose.position.z = 0
+        if self.last_position == "B":
+            pose.pose.position.x = 10.175
+            pose.pose.position.y = 1.755
+            pose.pose.position.z = 0
+            pose.pose.orientation.x = 0
+            pose.pose.orientation.y = 0
+            pose.pose.orientation.z = 0.70710808
+            pose.pose.orientation.w = 0.70710548
+        if self.last_position == "C":
+            pose.pose.position.x = 11.755
+            pose.pose.position.y = 0
+            pose.pose.position.z = 0
+        self.control.reset_simulator(pose)
 
 
 if __name__ == '__main__':
@@ -41,11 +81,15 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     rospy.init_node('position_test')
-    position = Position(args.simulator)
+    sensors = Sensors(args.simulator)
+    drive = Drive(sensors, args.simulator)
+    position = Position(drive, args.simulator)
     print("use '2D pose estimate' button to move the car")
     while True:
         print("enter key to show position - enter q to quit")
         cmd = input()
+        if cmd == "r":
+            position.reset_to_last_pos()
         if cmd == "q":
             exit()
 
