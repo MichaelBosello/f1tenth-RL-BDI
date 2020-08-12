@@ -54,6 +54,18 @@ class Position():
             return "END2"
         return ""
 
+    def position_index(self, position):
+        if position == "A":
+            return 0
+        if position == "B":
+            return 1
+        if position == "C":
+            return 2
+        if position == "END1":
+            return 3
+        if position == "END2":
+            return 4
+
     def reset_to_last_pos(self):
         pose = PoseStamped()
         if self.last_position == "A":

@@ -52,7 +52,8 @@ class Target():
             self.marker_publisher.publish(self.marker[TARGETS[1]])
 
     def new_target(self):
-        self.target = TARGETS[random.randrange(len(TARGETS))]
+        self.target_index = random.randrange(len(TARGETS))
+        self.target = TARGETS[self.target_index]
         if self.is_simulator:
             for target in TARGETS:
                 self.marker[target].color.r = 0.46
@@ -68,6 +69,9 @@ class Target():
 
     def current_target(self):
         return self.target
+
+    def current_target_index(self):
+        return self.target_index
 
 
 if __name__ == '__main__':
