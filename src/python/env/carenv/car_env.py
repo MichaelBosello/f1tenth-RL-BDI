@@ -60,14 +60,21 @@ class CarEnv:
 
     def step(self, action):
         if action == -1:
-            self.position.reset_to_last_pos()
-            self.reset_game()
-            return self.reward, self.state, self.is_terminal
-
-        if action == -2:
             self.target.new_target()
             self.reset_game()
             return self.reward, self.state, self.is_terminal
+
+        if action <= -2:
+            if action == -2:
+                self.position.reset_to_pos("A")
+            if action == -3:
+                self.position.reset_to_pos("B")
+            if action == -4:
+                self.position.reset_to_pos("C")
+            self.reset_game()
+            return self.reward, self.state, self.is_terminal
+
+
 
 
         self.step_number += 1

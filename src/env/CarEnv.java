@@ -57,14 +57,25 @@ public class CarEnv extends Artifact {
     }
 
     @OPERATION
-    public void reset_to_last_position() {
-        StateRest<List<Double>> state = car_env.step(-1);
+    public void reset_to_position(String position) {
+        StateRest<List<Double>> state = null;
+        switch (position) {
+            case "A":
+                state = car_env.step(-2);
+                break;
+            case "B":
+                state = car_env.step(-3);
+                break;
+            case "C":
+                state = car_env.step(-4);
+                break;
+        }
         updatePercepts(state);
     }
 
     @OPERATION
     public void new_target() {
-        StateRest<List<Double>> state = car_env.step(-2);
+        StateRest<List<Double>> state = car_env.step(-1);
         updatePercepts(state);
     }
 
@@ -91,6 +102,8 @@ public class CarEnv extends Artifact {
                 return "END1";
             case 4:
                 return "END2";
+            case 5:
+                return "PRE_A";
             default:
                 return "";
         }

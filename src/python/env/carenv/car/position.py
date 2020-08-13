@@ -29,7 +29,6 @@ class Position():
         else:
             odom_topic = "/odom"
         self.odom_subscriber = rospy.Subscriber(odom_topic, Odometry, self.odometry_callback)
-        self.last_position = None
 
     def odometry_callback(self, odometry):
         self.odometry = odometry
@@ -40,18 +39,17 @@ class Position():
     def car_position(self):
         c = self.car_position_coordinates()
         if c.x > 8.25 and c.x < 9 and c.y > -0.7 and c.y < 0.7:
-            self.last_position = "A"
             return "A"
         if c.x > 9.55 and c.x < 10.8 and c.y > 1.38 and c.y < 2.13:
-            self.last_position = "B"
             return "B"
         if c.x > 11.38 and c.x < 12.13 and c.y > -0.7 and c.y < 0.7:
-            self.last_position = "C"
             return "C"
         if c.x > 6.68 and c.x < 8 and c.y > 9.45 and c.y < 11:
             return "END1"
         if c.x > 17.2 and c.x < 18.5 and c.y > 13.6 and c.y < 14.9:
             return "END2"
+        if c.x > 7.5 and c.x < 8.25 and c.y > -0.7 and c.y < 0.7:
+            return "PRE_A"
         return ""
 
     def position_index(self, position):
@@ -65,15 +63,17 @@ class Position():
             return 3
         if position == "END2":
             return 4
+        if position == "PRE_A":
+            return 5
         return -1
 
-    def reset_to_last_pos(self):
+    def reset_to_pos(self, position):
         pose = PoseStamped()
-        if self.last_position == "A":
+        if position == "A":
             pose.pose.position.x = 8.625
             pose.pose.position.y = 0
             pose.pose.position.z = 0
-        if self.last_position == "B":
+        if position == "B":
             pose.pose.position.x = 10.175
             pose.pose.position.y = 1.755
             pose.pose.position.z = 0
@@ -81,7 +81,7 @@ class Position():
             pose.pose.orientation.y = 0
             pose.pose.orientation.z = 0.70710808
             pose.pose.orientation.w = 0.70710548
-        if self.last_position == "C":
+        if position == "C":
             pose.pose.position.x = 11.755
             pose.pose.position.y = 0
             pose.pose.position.z = 0
