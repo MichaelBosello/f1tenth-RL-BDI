@@ -9,6 +9,8 @@ import rospy
 from carenv.car.car_control import Drive
 from carenv.car.safety_control import SafetyControl
 from carenv.car.sensors import Sensors
+from carenv.car.position import Position
+from carenv.car.target import Target
 
 MAX_STOP = 3
 
@@ -31,6 +33,8 @@ class CarEnv:
         self.sensors = Sensors(is_simulator=self.is_simulator)
         self.control = Drive(self.sensors, is_simulator=self.is_simulator)
         self.safety_control = SafetyControl(self.control, self.sensors, is_simulator=self.is_simulator)
+        self.target = Target(is_simulator=self.is_simulator)
+        self.position = Position(self.control, is_simulator=self.is_simulator)
         time.sleep(4)
 
         # available actions
@@ -55,6 +59,17 @@ class CarEnv:
         self.reset_game()
 
     def step(self, action):
+        if action == -1:
+            self.position.reset_to_last_pos()
+            self.reset_game()
+            return self.reward, self.state, self.is_terminal
+
+        if action == -2:
+            self.target.new_target()
+            self.reset_game()
+            return self.reward, self.state, self.is_terminal
+
+
         self.step_number += 1
         self.episode_step_number += 1
 
@@ -84,7 +99,9 @@ class CarEnv:
                     self.control.reset_simulator()
                     self.stuck_count = 0
 
-            self.state = self._get_car_state()
+            position_index = float(self.position.position_index(self.position.car_position()))
+            target_index = float(self.target.current_target_index())
+            self.state = [[position_index], [target_index], self._get_car_state()]
             self.reward = -1
             self.is_terminal = True
             self.game_score += self.reward
@@ -126,7 +143,9 @@ class CarEnv:
         if ADD_LIDAR_DISTANCE_REWARD:
             reward += min(list(self.sensors.get_lidar_ranges())) * LIDAR_DISTANCE_WEIGHT
 
-        self.state = self._get_car_state()
+        position_index = float(self.position.position_index(self.position.car_position()))
+        target_index = float(self.target.current_target_index())
+        self.state = [[position_index], [target_index], self._get_car_state()]
         self.reward = reward
         self.is_terminal = False
         self.game_score += self.reward
@@ -136,7 +155,10 @@ class CarEnv:
     def reset_game(self):
         self.control.stop()
 
-        self.state = self._get_car_state()
+        self.target.new_target()
+        position_index = float(self.position.position_index(self.position.car_position()))
+        target_index = float(self.target.current_target_index())
+        self.state = [[position_index], [target_index], self._get_car_state()]
         self.reward = 0
         if self.is_terminal:
             self.game_number += 1
@@ -152,7 +174,7 @@ class CarEnv:
 
 
     def get_state_size(self):
-        return len(self.state)
+        return len(self.state[2])
 
     def get_num_actions(self):
         return len(self.action_set)

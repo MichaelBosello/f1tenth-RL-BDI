@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cartago.Artifact;
@@ -7,25 +8,30 @@ import cartago.ObsProperty;
 import rest.RestClient;
 import rest.StateRest;
 
-public class CarEnv extends Artifact{
+public class CarEnv extends Artifact {
 
     private static final boolean IS_SIMULATOR = true;
-    
-    RestClient<Double> car_env = new RestClient<>();
+
+    RestClient<List<Double>> car_env = new RestClient<>();
 
     @OPERATION
     public void init() {
         Map<String, String> parameters = new HashMap<>();
         parameters.put("simulator", Boolean.toString(IS_SIMULATOR));
-        StateRest<Double> state = car_env.initialize("CarEnv", parameters);
-        defineObsProperty("lidar_data", state.getState().toArray(new Double[0]));
+        StateRest<List<Double>> state = car_env.initialize("CarEnv", parameters);
+        Double[] lidar_data = state.getState().get(2).toArray(new Double[0]);
+        defineObsProperty("lidar_data", lidar_data);
+        String target = target_name((int) state.getState().get(1).get(0).doubleValue());
+        defineObsProperty("target", target);
+        String position = position_name((int) state.getState().get(0).get(0).doubleValue());
+        defineObsProperty("position", position);
         defineObsProperty("reward", state.getReward());
     }
 
     @OPERATION
     public void move(String move) {
 
-        StateRest<Double> state;
+        StateRest<List<Double>> state;
         switch (move) {
             case "forward":
                 state = car_env.step(0);
@@ -49,10 +55,60 @@ public class CarEnv extends Artifact{
 
         updatePercepts(state);
     }
-    
-    private void updatePercepts(StateRest<Double> state) {
-        ObsProperty lidar_data = getObsProperty("lidar_data");
-        lidar_data.updateValues(state.getState().toArray(new Double[0]));
+
+    @OPERATION
+    public void reset_to_last_position() {
+        StateRest<List<Double>> state = car_env.step(-1);
+        updatePercepts(state);
+    }
+
+    @OPERATION
+    public void new_target() {
+        StateRest<List<Double>> state = car_env.step(-2);
+        updatePercepts(state);
+    }
+
+    private String target_name(int index) {
+        switch (index) {
+            case 0:
+                return "END1";
+            case 1:
+                return "END2";
+            default:
+                return "";
+        }
+    }
+
+    private String position_name(int index) {
+        switch (index) {
+            case 0:
+                return "A";
+            case 1:
+                return "B";
+            case 2:
+                return "C";
+            case 3:
+                return "END1";
+            case 4:
+                return "END2";
+            default:
+                return "";
+        }
+    }
+
+    private void updatePercepts(StateRest<List<Double>> state) {
+        ObsProperty lidar_data_prop = getObsProperty("lidar_data");
+        Double[] lidar_data = state.getState().get(2).toArray(new Double[0]);
+        lidar_data_prop.updateValues(lidar_data);
+
+        ObsProperty target_prop = getObsProperty("target");
+        String target = target_name((int) state.getState().get(1).get(0).doubleValue());
+        target_prop.updateValues(target);
+
+        ObsProperty position_prop = getObsProperty("position");
+        String position = position_name((int) state.getState().get(0).get(0).doubleValue());
+        position_prop.updateValues(position);
+        
         ObsProperty reward = getObsProperty("reward");
         reward.updateValue(0, state.getReward());
 
