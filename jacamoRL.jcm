@@ -14,7 +14,7 @@
 
 mas jacamoRL {
 
-    agent rlagent : car_driver.asl {
+    agent rlagent : car_driver_intersection.asl {
     	ag-bb-class: rl.beliefbase.BeliefBaseRL	
     	focus: carenv.cp
     	verbose: 0
