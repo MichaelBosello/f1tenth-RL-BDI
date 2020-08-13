@@ -9,7 +9,7 @@ except Exception:
 import argparse
 import random
 
-TARGETS = ["end1", "end2"]
+TARGETS = ["END1", "END2"]
 
 class Target():
     def __init__(self, is_simulator=False):
