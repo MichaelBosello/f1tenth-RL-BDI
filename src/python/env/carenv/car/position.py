@@ -65,6 +65,7 @@ class Position():
             return 3
         if position == "END2":
             return 4
+        return -1
 
     def reset_to_last_pos(self):
         pose = PoseStamped()
