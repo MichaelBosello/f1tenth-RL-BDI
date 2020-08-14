@@ -78,7 +78,7 @@ public class CarEnv extends Artifact {
     @OPERATION
     public void new_target() {
         StateRest<List<Double>> state = car_env.step(-1);
-        updatePercepts(state);
+        updatePercepts(state, true);
     }
 
     private String target_name(int index) {
@@ -105,22 +105,22 @@ public class CarEnv extends Artifact {
             case 4:
                 return "END2";
             case 5:
-                return "PRE_A";
-            case 6:
                 return "START";
             default:
                 return "";
         }
     }
 
-    private void updatePercepts(StateRest<List<Double>> state) {
+    private void updatePercepts(StateRest<List<Double>> state) { updatePercepts(state, false); }
+
+    private void updatePercepts(StateRest<List<Double>> state, boolean new_target) {
         ObsProperty lidar_data_prop = getObsProperty("lidar_data");
         Double[] lidar_data = state.getState().get(2).toArray(new Double[0]);
         lidar_data_prop.updateValues((Object[]) lidar_data);
 
         ObsProperty target_prop = getObsProperty("target");
         String target = target_name((int) state.getState().get(1).get(0).doubleValue());
-        if(target_prop.getValue() != target) {
+        if(target_prop.getValue() != target || new_target) {
             target_prop.updateValues(target);
         }
 
