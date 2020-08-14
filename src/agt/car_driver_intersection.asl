@@ -4,16 +4,19 @@ rl_algorithm(follow_street, dqn).
 rl_observe(follow_street, lidar_data(list(1080))).
 rl_reward(follow_street, R) :- reward(R).
 rl_terminal(follow_street) :- crash.
+rl_terminal(follow_street) :- new_position.
 
 rl_algorithm(turn_left, dqn).
 rl_observe(turn_left, lidar_data(list(1080))).
 rl_reward(turn_left, R) :- reward(R).
 rl_terminal(turn_left) :- crash.
+rl_terminal(turn_left) :- new_position.
 
 rl_algorithm(go_forward, dqn).
 rl_observe(go_forward, lidar_data(list(1080))).
 rl_reward(go_forward, R) :- reward(R).
 rl_terminal(go_forward) :- crash.
+rl_terminal(go_forward) :- new_position.
 
 
 +target("END1") : true <-

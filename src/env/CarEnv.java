@@ -122,7 +122,15 @@ public class CarEnv extends Artifact {
 
         ObsProperty position_prop = getObsProperty("position");
         String position = position_name((int) state.getState().get(0).get(0).doubleValue());
-        position_prop.updateValues(position);
+        if(position_prop.getValue() != position) {
+            position_prop.updateValues(position);
+            if (!hasObsProperty("new_position"))
+                defineObsProperty("new_position");
+        } else {
+            try {
+                removeObsProperty("new_position");
+            } catch (IllegalArgumentException e) {}
+        }
         
         ObsProperty reward = getObsProperty("reward");
         reward.updateValue(0, state.getReward());
