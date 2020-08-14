@@ -50,6 +50,8 @@ class Position():
             return "END2"
         if c.x > 7.5 and c.x < 8.25 and c.y > -0.7 and c.y < 0.7:
             return "PRE_A"
+        if c.x < 0.3 and c.y > -0.7 and c.y < 0.7:
+            return "START"
         return ""
 
     def position_index(self, position):
@@ -65,6 +67,8 @@ class Position():
             return 4
         if position == "PRE_A":
             return 5
+        if position == "START":
+            return 6
         return -1
 
     def reset_to_pos(self, position):

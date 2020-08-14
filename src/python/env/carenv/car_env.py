@@ -71,6 +71,8 @@ class CarEnv:
                 self.position.reset_to_pos("B")
             if action == -4:
                 self.position.reset_to_pos("C")
+            if action == -5:
+                self.position.reset_to_pos("")
             self.reset_game()
             return self.reward, self.state, self.is_terminal
 

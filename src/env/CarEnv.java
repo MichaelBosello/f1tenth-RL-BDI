@@ -69,6 +69,8 @@ public class CarEnv extends Artifact {
             case "C":
                 state = car_env.step(-4);
                 break;
+            default:
+                state = car_env.step(-5);
         }
         updatePercepts(state);
     }
@@ -104,6 +106,8 @@ public class CarEnv extends Artifact {
                 return "END2";
             case 5:
                 return "PRE_A";
+            case 6:
+                return "START";
             default:
                 return "";
         }
