@@ -20,25 +20,28 @@ rl_terminal(go_forward) :- new_position.
 
 
 +target("END1") : true <-
-    +target_point("A");
+    -+starting_point("START");
+    -+target_point("A");
     !follow_street;
-    +starting_point("A");
-    +target_point("B");
+    -+starting_point("A");
+    -+target_point("B");
     !turn_left;
-    +starting_point("B");
-    +target_point("END1");
+    -+starting_point("B");
+    -+target_point("END1");
     !follow_street;
     new_target.
 
 +target("END2") : true <-
-    +target_point("A");
+    -+starting_point("START");
+    -+target_point("A");
     !follow_street;
-    +starting_point("A");
-    +target_point("C");
+    -+starting_point("A");
+    -+target_point("C");
     !go_forward;
-    +starting_point("C");
-    +target_point("END2");
-    !follow_street.
+    -+starting_point("C");
+    -+target_point("END2");
+    !follow_street;
+    new_target.
 
 
 
