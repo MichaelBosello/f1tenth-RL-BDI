@@ -20,7 +20,7 @@ public class CarEnv extends Artifact {
         parameters.put("simulator", Boolean.toString(IS_SIMULATOR));
         StateRest<List<Double>> state = car_env.initialize("CarEnv", parameters);
         Double[] lidar_data = state.getState().get(2).toArray(new Double[0]);
-        defineObsProperty("lidar_data", lidar_data);
+        defineObsProperty("lidar_data", (Object[]) lidar_data);
         String target = target_name((int) state.getState().get(1).get(0).doubleValue());
         defineObsProperty("target", target);
         String position = position_name((int) state.getState().get(0).get(0).doubleValue());
@@ -116,7 +116,7 @@ public class CarEnv extends Artifact {
     private void updatePercepts(StateRest<List<Double>> state) {
         ObsProperty lidar_data_prop = getObsProperty("lidar_data");
         Double[] lidar_data = state.getState().get(2).toArray(new Double[0]);
-        lidar_data_prop.updateValues(lidar_data);
+        lidar_data_prop.updateValues((Object[]) lidar_data);
 
         ObsProperty target_prop = getObsProperty("target");
         String target = target_name((int) state.getState().get(1).get(0).doubleValue());
