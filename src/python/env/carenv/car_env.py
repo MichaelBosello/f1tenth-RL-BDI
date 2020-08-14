@@ -56,11 +56,13 @@ class CarEnv:
         process.daemon = True
         process.start()
 
+        self.target.new_target()
         self.reset_game()
 
     def step(self, action):
         if action == -1:
             self.target.new_target()
+            self.position.reset_to_pos("")
             self.reset_game()
             return self.reward, self.state, self.is_terminal
 
@@ -164,7 +166,6 @@ class CarEnv:
     def reset_game(self):
         self.control.stop()
 
-        self.target.new_target()
         position_index = float(self.position.position_index(self.position.car_position()))
         target_index = float(self.target.current_target_index())
         self.state = [[position_index], [target_index], self._get_car_state()]
