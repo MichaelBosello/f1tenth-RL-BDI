@@ -38,17 +38,22 @@ class Position():
 
     def car_position(self):
         c = self.car_position_coordinates()
-        if c.x > 8.25 and c.x < 9 and c.y > -0.7 and c.y < 0.7:
+        if c.x > 7.6 and c.x < 8.4 and c.y < 3:
             return "A"
-        if c.x > 9.55 and c.x < 10.8 and c.y > 1.38 and c.y < 2.13:
+
+        if c.x < 12 and c.y > 1.6 and c.y < 2.4:
             return "B"
-        if c.x > 11.38 and c.x < 12.13 and c.y > -0.7 and c.y < 0.7:
+
+        if c.x > 11.8 and c.x < 12.6 and c.y < 3:
             return "C"
-        if c.x > 6.68 and c.x < 8 and c.y > 9.45 and c.y < 11:
+
+        if c.x < 10 and c.y > 7 and c.y < 9.8:
             return "END1"
-        if c.x > 17.2 and c.x < 18.5 and c.y > 13.6 and c.y < 14.9:
+
+        if c.x > 14 and c.y > 14:
             return "END2"
-        if c.x < 0.3 and c.y > -0.7 and c.y < 0.7:
+
+        if c.x < 0.2:
             return "START"
         return ""
 

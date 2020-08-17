@@ -39,13 +39,13 @@ class Target():
                 self.marker[target].color.b = 0.6
                 self.marker[target].color.a = 1.0
             point = PointStamped()
-            point.point.x = 7.5
-            point.point.y = 8.4
+            point.point.x = 6.96
+            point.point.y = 7.96
             point.point.z = 0
             self.marker[TARGETS[0]].pose.position = point.point
             self.marker_publisher.publish(self.marker[TARGETS[0]])
             point = PointStamped()
-            point.point.x = 18
+            point.point.x = 18.32
             point.point.y = 15.9
             point.point.z = 0
             self.marker[TARGETS[1]].pose.position = point.point
