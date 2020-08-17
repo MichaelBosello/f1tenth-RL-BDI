@@ -15,7 +15,8 @@ from car_driver.replay import ReplayMemory, Sample
 from car_driver.state import State
 
 class DqnAgent():
-    def __init__(self, num_action, state_size, params={}):
+    def __init__(self, num_action, state_size, params={}, agent_id = None):
+        self.agent_id = agent_id
         self.__parse_argument()
         self.__setup(num_action, state_size)
 
@@ -67,6 +68,15 @@ class DqnAgent():
         parser.add_argument("--logging", type=bool, default=True, help="enable tensorboard logging")
         
         self.args = parser.parse_args()
+
+        if self.agent_id == "turn_left" or self.agent_id == "go_forward":
+            self.args.learning_rate = 0.00044
+            self.args.epsilon_decay = 0.99993
+            self.args.target_model_update_freq = 400
+            self.args.repeat_action = 3
+        if self.agent_id == "follow_street":
+            pass
+
         print('Arguments: ', (self.args))
 
     #################################
