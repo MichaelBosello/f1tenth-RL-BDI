@@ -47,7 +47,7 @@ class Position():
         if c.x > 11.8 and c.x < 12.6 and c.y < 3:
             return "C"
 
-        if c.x < 10 and c.y > 7 and c.y < 9.8:
+        if c.x < 9 and c.y > 7 and c.y < 9.8:
             return "END1"
 
         if c.x > 14 and c.y > 14:
