@@ -5,8 +5,8 @@ rl_observe(follow_street, lidar_data(list(1080))).
 rl_terminal(follow_street) :- crash.
 rl_terminal(follow_street) :- new_position.
 rl_reward(follow_street, R) :- reward(R).
-rl_reward(follow_street, 10) :- target_point(P) & position(P).
-rl_reward(follow_street, -10) :- new_position & position(P)
+rl_reward(follow_street, 50) :- new_position & position(P) & target_point(P).
+rl_reward(follow_street, -50) :- new_position & position(P)
                                     & not target_point(P) & not starting_point(P)
                                     & not position("").
 
@@ -15,8 +15,8 @@ rl_observe(turn_left, lidar_data(list(1080))).
 rl_terminal(turn_left) :- crash.
 rl_terminal(turn_left) :- new_position.
 rl_reward(turn_left, R) :- reward(R).
-rl_reward(turn_left, 10) :- target_point(P) & position(P).
-rl_reward(turn_left, -10) :- new_position & position(P)
+rl_reward(turn_left, 50) :- new_position & position(P) & target_point(P).
+rl_reward(turn_left, -50) :- new_position & position(P)
                                     & not target_point(P) & not starting_point(P)
                                     & not position("").
 
@@ -25,8 +25,8 @@ rl_observe(go_forward, lidar_data(list(1080))).
 rl_terminal(go_forward) :- crash.
 rl_terminal(go_forward) :- new_position.
 rl_reward(go_forward, R) :- reward(R).
-rl_reward(go_forward, 10) :- target_point(P) & position(P).
-rl_reward(go_forward, -10) :- new_position & position(P)
+rl_reward(go_forward, 50) :- new_position & position(P) & target_point(P).
+rl_reward(go_forward, -50) :- new_position & position(P)
                                     & not target_point(P) & not starting_point(P)
                                     & not position("").
 
@@ -47,6 +47,7 @@ rl_reward(go_forward, -10) :- new_position & position(P)
     !follow_street;
     .println("reached target END1");
     .println("getting new target");
+    reset_to_position("START");
     new_target.
 
 +target("END2") : true <-
@@ -65,13 +66,13 @@ rl_reward(go_forward, -10) :- new_position & position(P)
     !follow_street;
     .println("reached target END2");
     .println("getting new target");
+    reset_to_position("START");
     new_target.
 
 
 
 +!follow_street : target_point(P) & position(P) <-
-    move("stop");
-    .println("reward +10: reached ", P).
+    .println("reached ", P).
 
 +!follow_street : starting_point(P) & position(P) <-
     rl.execute(follow_street);
@@ -83,8 +84,7 @@ rl_reward(go_forward, -10) :- new_position & position(P)
 
 +!follow_street : true <-
     ?starting_point(P);
-    move("stop");
-    .println("reward -10: wrong direction taken");
+    .println("wrong direction taken");
     .println("resetting to point ", P);
     reset_to_position(P);
     !follow_street.
@@ -92,8 +92,7 @@ rl_reward(go_forward, -10) :- new_position & position(P)
 
 
 +!turn_left : target_point(P) & position(P) <-
-    move("stop");
-    .println("reward +10: reached ", P).
+    .println("reached ", P).
 
 +!turn_left : starting_point(P) & position(P) <-
     rl.execute(turn_left);
@@ -105,8 +104,7 @@ rl_reward(go_forward, -10) :- new_position & position(P)
 
 +!turn_left : true <-
     ?starting_point(P);
-    move("stop");
-    .println("reward -10: wrong direction taken");
+    .println("wrong direction taken");
     .println("resetting to point ", P);
     reset_to_position(P);
     !turn_left.
@@ -114,8 +112,7 @@ rl_reward(go_forward, -10) :- new_position & position(P)
 
 
 +!go_forward : target_point(P) & position(P) <-
-    move("stop");
-    .println("reward +10: reached ", P).
+    .println("reached ", P).
 
 +!go_forward : starting_point(P) & position(P) <-
     rl.execute(go_forward);
@@ -127,8 +124,7 @@ rl_reward(go_forward, -10) :- new_position & position(P)
 
 +!go_forward : true <-
     ?starting_point(P);
-    move("stop");
-    .println("reward -10: wrong direction taken");
+    .println("wrong direction taken");
     .println("resetting to point ", P);
     reset_to_position(P);
     !go_forward.
