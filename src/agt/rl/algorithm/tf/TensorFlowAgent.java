@@ -40,8 +40,6 @@ public class TensorFlowAgent implements AlgorithmRL{
     
     private Client client = ClientBuilder.newClient();
     
-    private double preActionReward = 0;
-    
     public TensorFlowAgent(String goal) {
         this.goal = goal;
     }
@@ -64,10 +62,8 @@ public class TensorFlowAgent implements AlgorithmRL{
         StateRest<Double> state = new StateRest<>();
         state.setState(currentState);
         state.setState_type("double");
-        state.setReward(preActionReward);
+        state.setReward(reward);
         state.setIs_terminal(isTerminal);
-        
-        preActionReward = reward;
 
         Response response = client.target(TARGET + goal + policy)
                 .request(MediaType.APPLICATION_JSON)
