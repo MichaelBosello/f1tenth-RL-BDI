@@ -70,10 +70,7 @@ class DqnAgent():
         self.args = parser.parse_args()
 
         if self.agent_id == "turn_left" or self.agent_id == "go_forward":
-            self.args.learning_rate = 0.00044
-            self.args.epsilon_decay = 0.99993
-            self.args.target_model_update_freq = 400
-            self.args.repeat_action = 3
+            self.args.epsilon_decay = 0.9999
         if self.agent_id == "follow_street":
             pass
 
