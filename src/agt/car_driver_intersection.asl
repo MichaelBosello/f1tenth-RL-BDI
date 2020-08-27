@@ -72,6 +72,7 @@ rl_reward(go_forward, -50) :- new_position & position(P)
 
 
 +!follow_street : target_point(P) & position(P) <-
+    move("stop");
     .println("reached ", P).
 
 +!follow_street : starting_point(P) & position(P) <-
@@ -83,6 +84,7 @@ rl_reward(go_forward, -50) :- new_position & position(P)
     !follow_street.
 
 +!follow_street : true <-
+    move("stop");
     ?starting_point(P);
     .println("wrong direction taken");
     .println("resetting to point ", P);
@@ -92,6 +94,7 @@ rl_reward(go_forward, -50) :- new_position & position(P)
 
 
 +!turn_left : target_point(P) & position(P) <-
+    move("stop");
     .println("reached ", P).
 
 +!turn_left : starting_point(P) & position(P) <-
@@ -103,6 +106,7 @@ rl_reward(go_forward, -50) :- new_position & position(P)
     !turn_left.
 
 +!turn_left : true <-
+    move("stop");
     ?starting_point(P);
     .println("wrong direction taken");
     .println("resetting to point ", P);
@@ -112,6 +116,7 @@ rl_reward(go_forward, -50) :- new_position & position(P)
 
 
 +!go_forward : target_point(P) & position(P) <-
+    move("stop");
     .println("reached ", P).
 
 +!go_forward : starting_point(P) & position(P) <-
@@ -123,6 +128,7 @@ rl_reward(go_forward, -50) :- new_position & position(P)
     !go_forward.
 
 +!go_forward : true <-
+    move("stop");
     ?starting_point(P);
     .println("wrong direction taken");
     .println("resetting to point ", P);
