@@ -18,7 +18,7 @@ As a first step, we defined and trained a BDI agent (*agt/car_driver.asl*) that 
 
 As a second step, we defined and trained a BDI agent (*agt/car_driver_intersection.asl*) that drives in a track with an intersection. There are two targets (randomly alternating), and the agent have to choose the right direction at the intersection to reach the proper target. The BDI hard plans define the high-level directions according to the agent position and the target to be reached. The learned soft-plans are three: *follow_street*, the car follow the path until a new known position is reached (see the map below); *go_forward*, at the intersection the car goes straight; *turn_left*, at the intersection the car turns to the left. The burden to perform actions at the intersection is given to soft-plans because we cannot blindly move forward or move left as even a small perturation will cause a crash if not fixed. 
 
-<img src="img/intersection-track-rotated.jpg" alt="intersection track map" width="720"/>
+<img src="img/intersection-track-rotated.jpg" alt="intersection track map" width="560"/>
 
 [f1tenth-rl](https://github.com/MichaelBosello/f1tenth-RL) *can be used on both the real f1tenth car and on its simulator*.
 
