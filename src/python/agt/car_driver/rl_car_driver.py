@@ -34,6 +34,7 @@ class DqnAgent():
         parser.add_argument("--epsilon-min", type=float, default=0.1, help="epsilon with decay doesn't fall below epsilon min")
         parser.add_argument("--eval-epsilon", type=float, default=0.01, help="epsilon used in evaluation")
         parser.add_argument("--batch-size", type=float, default=32, help="size of the batch used in gradient descent")
+        parser.add_argument("--stop-training-time", type=float, default=0, help="[minutes] stop training (keep using eval) after [stop-training-time] has elapsed. <= 0 for non stop")
 
         parser.add_argument("--observation-steps", type=int, default=400, help="train only after this many steps (1 step = [history-length] frames)")
         parser.add_argument("--target-model-update-freq", type=int, default=500, help="how often (in steps) to update the target model")
@@ -69,10 +70,18 @@ class DqnAgent():
         
         self.args = parser.parse_args()
 
-        if self.agent_id == "turn_left" or self.agent_id == "go_forward":
+        if self.agent_id == "turn_left":
             self.args.epsilon_decay = 0.9999
+            self.args.save_model_freq = 1500
+            #self.args.model = "run-bdi-intersection-simulator-cnn1d/run-turn-left/models/"
+        if self.agent_id == "go_forward":
+            self.args.epsilon_decay = 0.9999
+            self.args.save_model_freq = 1500
+            #self.args.model = "run-bdi-intersection-simulator-cnn1d/run-go-forward/models/"
         if self.agent_id == "follow_street":
-            pass
+            self.args.stop_training_time = 140
+            self.args.save_model_freq = 4000
+            #self.args.model = "run-bdi-intersection-simulator-cnn1d/run-follow-street/models/"
 
         print('Arguments: ', (self.args))
 
@@ -216,6 +225,11 @@ class DqnAgent():
                 if self.steps - self.step_start >= self.args.train_epoch_steps:
                     self.is_epoch_training = False
                     self.step_start = self.steps
+                    if self.args.stop_training_time > 0:
+                        elapsed_minutes = ((datetime.datetime.now() - self.start_time).total_seconds()) / 60
+                        if elapsed_minutes > self.args.stop_training_time:
+                            self.args.train_epoch_steps = 0
+                            self.dqn.save_network()
             if not self.is_epoch_training and self.args.train_epoch_steps > 0:
                 if self.steps - self.step_start >= self.args.eval_epoch_steps:
                     self.is_epoch_training = True
