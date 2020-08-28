@@ -14,7 +14,11 @@ The BDI agent will handle the high-level planning of the path, deciding which di
 
 This approach is promising as RL struggles in high level pianification meanwhile humans struggles in hard-coding of low-level control. In this way, we can benefit from the strengths of both methods.
 
-As a first step, we defined a BDI agent (*agt/car_driver.asl*) that drives in a circuit, without high-level decisions, to test the RL control capabilities of the framework.
+As a first step, we defined and trained a BDI agent (*agt/car_driver.asl*) that drives in a circuit, without high-level decisions, to test the RL control capabilities of the framework.
+
+As a second step, we defined and trained a BDI agent (*agt/car_driver_intersection.asl*) that drives in a track with an intersection. There are two targets (randomly alternating), and the agent have to choose the right direction at the intersection to reach the proper target. The BDI hard plans define the high-level directions according to the agent position and the target to be reached. The learned soft-plans are three: *follow_street*, the car follow the path until a new known position is reached (see the map below); *go_forward*, at the intersection the car goes straight; *turn_left*, at the intersection the car turns to the left. The burden to perform actions at the intersection is given to soft-plans because we cannot blindly move forward or move left as even a small perturation will cause a crash if not fixed. 
+
+<img src="map/intersection-track.jpg" alt="car front" width="720" style="transform:rotate(-90deg); margin-top: 60px; margin-bottom: 80px"/>
 
 [f1tenth-rl](https://github.com/MichaelBosello/f1tenth-RL) *can be used on both the real f1tenth car and on its simulator*.
 
@@ -133,7 +137,7 @@ Run the agent system:
 
     Change the map (see below)
 
-5) Install tensorflow 2.1.x
+5) Install tensorflow 2.x.y
 
     `$ pip3 install tensorflow`
 
@@ -150,7 +154,7 @@ Run the agent system:
 	pip3 install flask flask-jsonpify flask-restful
 
 ## Experiments
-In the end, the agent successfully learned a control policy, based on lidar data, to drive in a track.
+In the end, the agent successfully learned a control policy, based on lidar data, to drive in a track with and without an intersection.
 Tensorboard logging and trained models of experiments are provided in the release section. Maps used in simulated experiments are available in the */map* directory. If you want to use these maps, you must edit *simulator.launch* (see below) or copy the one provided in */map*
 
 ### Experimenting with parameters
