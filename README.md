@@ -28,6 +28,11 @@ ___
 ### f1tenth-RL (from the f1tenth-RL readme)
 ### (Deep Reinforcement Learning Autonomous Driving Using Lidar in the Physical World)
 
+[[Report](http://apice.unibo.it/xwiki/bin/download/Courses/Sa1920Projects-LidarBosello/f1tenth-report.pdf)]
+[[Project webpage](http://www.apice.unibo.it/xwiki/bin/view/Courses/Sa1920Projects-LidarBosello?language=en)]
+[[Slides](http://apice.unibo.it/xwiki/bin/download/Courses/Sa1920Projects-LidarBosello/f1tenth-RL-slide.pdf)]
+[[Video](https://youtu.be/ardg7-7Pevw)]
+
 <img src="img/car_front.jpg" alt="car front" width="720"/>
 
 <img src="img/car_side.jpg" alt="car front" width="1080"/>
@@ -40,7 +45,7 @@ It is designed to running on [f1tenth cars](https://f1tenth.org/)
 
 *It can be used on both the real f1tenth car and on its simulator*
 
-The DQN implementation provides several techniques to improve performances like double DQN, replay buffer, state history, prioritized sampling. It has various parameters (see below) that one can modify to fit the specific environment. There are also various options to pre-process lidar data. One can use lidar data directly or represent them as images containing the environment borders
+The DQN implementation provides several techniques to improve performances like target network, replay buffer, state history, prioritized sampling. It has various parameters (see below) that one can modify to fit the specific environment. There are also various options to pre-process lidar data. One can use lidar data directly or represent them as images containing the environment borders
 
 Model saving, replay buffer serialization, and tensorboard logging are provided 
 
@@ -51,9 +56,9 @@ This project is a PoC of the framework presented in
 
 ***From Programming Agents to Educating Agents – A Jason-based Framework for Integrating Learning in the Development of Cognitive Agents***
 
-Paper avaliable at: https://link.springer.com/chapter/10.1007/978-3-030-51417-4_9 (short freely accessible version [here](https://cgi.csc.liv.ac.uk/~lad/emas2019/accepted/EMAS2019_paper_33.pdf))
-
-Slides of the presentation at EMAS: https://www.slideshare.net/MichaelBosello/emas-2019-from-programming-agents-to-educating-agents
+[[DOI](https://doi.org/10.1007/978-3-030-51417-4_9)]
+[[pre-print (free access)](https://cgi.csc.liv.ac.uk/~lad/emas2019/accepted/EMAS2019_paper_33.pdf)]
+[[talk slides](https://www.slideshare.net/MichaelBosello/emas-2019-from-programming-agents-to-educating-agents)]
 
 This is an integration of BDI agents and Reinforcement Learning.
 It is based on [Jason](http://jason.sourceforge.net/wp/) (Actually, it is a [JaCaMo](http://jacamo.sourceforge.net/) project).
