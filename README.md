@@ -1,28 +1,28 @@
 # F1TENTH-RL-BDI
 
-Implementation of a BDI driver agent that uses BDI plans for high-level path planning and Reinforcement Learning for low level control.
+Implementation of a BDI driver agent that uses BDI plans for high-level path planning and Reinforcement Learning for low-level control.
 
-This work is based on the [Jason-RL](https://github.com/MichaelBosello/jacamo-rl) framework and the [f1tenth-rl](https://github.com/MichaelBosello/f1tenth-RL) project. You can find additional useful documentation in those repo.
+This work is based on the [Jason-RL](https://github.com/MichaelBosello/jacamo-rl) framework and the [f1tenth-rl](https://github.com/MichaelBosello/f1tenth-RL) project. You can find additional useful documentation in those repos.
 
 ## Introduction
 
-The [Jason-RL](https://github.com/MichaelBosello/jacamo-rl) framework allows to develop BDI agents that can learn some plans, called *soft-plans*, using Reinforcement Learning. The aim is to mix plans defined by the developer (*hard-plans*) and soft-plans.
+The [Jason-RL](https://github.com/MichaelBosello/jacamo-rl) framework allows the development of BDI agents that can learn some plans, called *soft-plans*, using Reinforcement Learning. The aim is to mix plans defined by the developer (*hard-plans*) and soft-plans.
 
-In this project, we want to exploit the mixed plans approach for autonomous driving.
+In this project, we want to exploit the mixed-plans approach for autonomous driving.
 
-The BDI agent will handle the high-level planning of the path, deciding which direction should be taken. The RL plans will handle the low level control, using sensors and actuators to actually move without incident.
+The BDI agent will handle the high-level planning of the path, deciding which direction should be taken. The RL plans will handle the low-level control, using sensors and actuators to actually move without incident.
 
-This approach is promising as RL struggles in high level pianification meanwhile humans struggles in hard-coding of low-level control. In this way, we can benefit from the strengths of both methods.
+This approach is promising as RL struggles in long-term planning meanwhile humans struggles in hard-coding of low-level control. In this way, we can benefit from the strengths of both methods.
 
 As a first step, we defined and trained a BDI agent (*agt/car_driver.asl*) that drives in a circuit, without high-level decisions, to test the RL control capabilities of the framework.
 
-As a second step, we defined and trained a BDI agent (*agt/car_driver_intersection.asl*) that drives in a track with an intersection. There are two targets (randomly alternating), and the agent have to choose the right direction at the intersection to reach the proper target. The BDI hard plans define the high-level directions according to the agent position and the target to be reached. The learned soft-plans are three: *follow_street*, the car follow the path until a new known position is reached (see the map below); *go_forward*, at the intersection the car goes straight; *turn_left*, at the intersection the car turns to the left. The burden to perform actions at the intersection is given to soft-plans because we cannot blindly move forward or move left as even a small perturation will cause a crash if not fixed. 
+As a second step, we defined and trained a BDI agent (*agt/car_driver_intersection.asl*) that drives in a track with an intersection. There are two targets (randomly alternating), and the agent has to choose the right direction at the intersection to reach the proper target. The BDI hard plans define the high-level directions according to the agent position and the target to be reached. The learned soft-plans are three: *follow_street*, the car follows the path until a new known position is reached (see the map below); *go_forward*, the car goes straight at the intersection; *turn_left*, the car turns to the left at the intersection. The burden to perform actions at the intersection is given to soft-plans because we cannot blindly move forward or move left as even a small perturbation will cause a crash if not fixed. 
 
 <img src="img/intersection-track-rotated.jpg" alt="intersection track map" width="560"/>
 
 [f1tenth-rl](https://github.com/MichaelBosello/f1tenth-RL) *can be used on both the real f1tenth car and on its simulator*.
 
-Currently, this project has been tested only on the simulator for problem of space. We aim to bring the experiment on the physical car soon.
+Currently, this project has been tested only on the simulator for problems of space. We aim to bring the experiment on the physical car soon.
 
 ___
 ### f1tenth-RL (from the f1tenth-RL readme)
