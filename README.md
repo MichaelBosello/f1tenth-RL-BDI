@@ -1,8 +1,28 @@
 # F1TENTH-RL-BDI
+# Integrating BDI and Reinforcement Learning: the Case Study of Autonomous Driving
 
 Implementation of a BDI driver agent that uses BDI plans for high-level path planning and Reinforcement Learning for low-level control.
 
 This work is based on the [Jason-RL](https://github.com/MichaelBosello/jacamo-rl) framework and the [f1tenth-rl](https://github.com/MichaelBosello/f1tenth-RL) project. You can find additional useful documentation in those repos.
+
+## Paper
+
+If you use this repo, please cite my master's thesis.
+
+*Integrating BDI and Reinforcement Learning: the Case Study of Autonomous Driving*
+
+Michael Bosello.
+[[URL](http://amslaurea.unibo.it/21467/)][[Video](https://youtu.be/-9A72PHkR0E)]
+
+```
+@mastersthesis{amslaurea21467,
+          author = {Michael Bosello},
+           title = {Integrating BDI and Reinforcement Learning: the Case Study of Autonomous Driving},
+             url = {http://amslaurea.unibo.it/21467/},
+    school       = {University of Bologna},
+    year         = {2020},
+}
+```
 
 ## Introduction
 
