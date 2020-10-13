@@ -19,8 +19,8 @@ Michael Bosello.
           author = {Michael Bosello},
            title = {Integrating BDI and Reinforcement Learning: the Case Study of Autonomous Driving},
              url = {http://amslaurea.unibo.it/21467/},
-    school       = {University of Bologna},
-    year         = {2020},
+          school = {University of Bologna},
+            year = {2020},
 }
 ```
 
