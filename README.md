@@ -12,7 +12,7 @@ If you use this repo, please cite my master's thesis.
 *Integrating BDI and Reinforcement Learning: the Case Study of Autonomous Driving*
 
 Michael Bosello.
-[[URL](http://amslaurea.unibo.it/21467/)][[Video](https://youtu.be/-9A72PHkR0E)]
+[[URL](http://amslaurea.unibo.it/21467/)][[Video](https://youtu.be/-9A72PHkR0E)][[Slides](https://michaelbosello.github.io/uploads/slides/presentations/slide-rl-bdi.pdf)]
 
 ```
 @mastersthesis{amslaurea21467,
@@ -46,12 +46,11 @@ Currently, this project has been tested only on the simulator for problems of sp
 
 ___
 ### f1tenth-RL (from the f1tenth-RL readme)
-### (Deep Reinforcement Learning Autonomous Driving Using Lidar in the Physical World)
+### Train in Austria, Race in Montecarlo: Cross-Track Driving LIDAR equipped F1tenth with Deep RL
 
-[[Report](http://apice.unibo.it/xwiki/bin/download/Courses/Sa1920Projects-LidarBosello/f1tenth-report.pdf)]
-[[Project webpage](http://www.apice.unibo.it/xwiki/bin/view/Courses/Sa1920Projects-LidarBosello?language=en)]
-[[Slides](http://apice.unibo.it/xwiki/bin/download/Courses/Sa1920Projects-LidarBosello/f1tenth-RL-slide.pdf)]
-[[Video](https://youtu.be/ardg7-7Pevw)]
+[[Paper](https://doi.org/10.1109/CCNC49033.2022.9700730)]
+[[Training on the physical car Video](https://youtu.be/ardg7-7Pevw)]
+
 
 <img src="img/car_front.jpg" alt="car front" width="720"/>
 
@@ -65,11 +64,9 @@ It is designed to running on [f1tenth cars](https://f1tenth.org/)
 
 *It can be used on both the real f1tenth car and on its simulator*
 
-The DQN implementation provides several techniques to improve performances like target network, replay buffer, state history, prioritized sampling. It has various parameters (see below) that one can modify to fit the specific environment. There are also various options to pre-process lidar data. One can use lidar data directly or represent them as images containing the environment borders
+The DQN implementation provides several techniques to improve performances like target network, replay buffer, state history, prioritized sampling. It has various parameters (see below) that one can modify to fit the specific environment. There are also various options to pre-process lidar data. One can use lidar data directly or represent them as images containing the environment borders. Velocity can be added to to the state
 
-Model saving, replay buffer serialization, and tensorboard logging are provided 
-
-In our experiment, we want to test *DQN* training directly in the *real world* through realistic 1/10 scale car prototypes capable of performing training in real-time. This allows us to explore the use of RL for autonomous driving in the physical world in a cheap and safe way. In this setting, the driver agent faces all the problems of a not simulated environment, including sensors noise and actuators’ unpredictability. We start with the implementation of DQN on the car, and then we try various alterations to improve performance like reward function engineering and hyper-parameters tuning
+Model saving, replay buffer serialization, and tensorboard logging are provided
 
 ### BDI-RL Framework (from the BDI-RL Framework readme)
 This project is a PoC of the framework presented in 
@@ -77,8 +74,8 @@ This project is a PoC of the framework presented in
 ***From Programming Agents to Educating Agents – A Jason-based Framework for Integrating Learning in the Development of Cognitive Agents***
 
 [[DOI](https://doi.org/10.1007/978-3-030-51417-4_9)]
-[[pre-print (free access)](https://cgi.csc.liv.ac.uk/~lad/emas2019/accepted/EMAS2019_paper_33.pdf)]
-[[talk slides](https://www.slideshare.net/MichaelBosello/emas-2019-from-programming-agents-to-educating-agents)]
+[[Pre-print](https://cgi.csc.liv.ac.uk/~lad/emas2019/accepted/EMAS2019_paper_33.pdf)]
+[[Slides](https://michaelbosello.github.io/uploads/slides/presentations/EMAS2019-slide.pdf)]
 
 This is an integration of BDI agents and Reinforcement Learning.
 It is based on [Jason](http://jason.sourceforge.net/wp/) (Actually, it is a [JaCaMo](http://jacamo.sourceforge.net/) project).
