@@ -12,7 +12,9 @@ If you use this repo, please cite my master's thesis.
 *Integrating BDI and Reinforcement Learning: the Case Study of Autonomous Driving*
 
 Michael Bosello.
-[[URL](http://amslaurea.unibo.it/21467/)][[Video](https://youtu.be/-9A72PHkR0E)][[Slides](https://michaelbosello.github.io/uploads/slides/presentations/slide-rl-bdi.pdf)]
+[[URL](http://amslaurea.unibo.it/21467/)]
+[[Slides](https://michaelbosello.github.io/uploads/slides/presentations/slide-rl-bdi.pdf)]
+[[Video](https://youtu.be/-9A72PHkR0E)]
 
 ```
 @mastersthesis{amslaurea21467,
@@ -49,6 +51,7 @@ ___
 ### Train in Austria, Race in Montecarlo: Cross-Track Driving LIDAR equipped F1tenth with Deep RL
 
 [[Paper](https://doi.org/10.1109/CCNC49033.2022.9700730)]
+[[Slides](https://michaelbosello.github.io/uploads/slides/presentations/Train_in_Austria_Race_in_Montecarlo.pdf)]
 [[Training on the physical car Video](https://youtu.be/ardg7-7Pevw)]
 
 
